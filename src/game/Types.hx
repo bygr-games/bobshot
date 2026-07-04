@@ -20,6 +20,7 @@ enum abstract GameAction(Int) to Int {
 	var ToggleDebugDrone;
 	var DebugDroneZoomIn;
 	var DebugDroneZoomOut;
+	var Shoot;
 	var DebugTurbo;
 	var DebugSlowMo;
 	var ScreenshotMode;

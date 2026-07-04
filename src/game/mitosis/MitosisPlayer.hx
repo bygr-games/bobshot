@@ -907,6 +907,10 @@ class MitosisPlayer extends Entity {
 			ca.rumble(0.05, 0.06);
 		}
 
+		// Shoot
+		if( ca.isPressed(Shoot) && !cd.hasSetS("playerShoot", 0.3) )
+			new Projectile(centerX + dir * 10, centerY - 2, dir, "basic", "enemy");
+
 		// Walk
 		if( !isChargingAction() && ca.getAnalogDist2(MoveLeft,MoveRight)>0 ) {
 			// As mentioned above, we don't touch physics values (eg. `dx`) here. We just store some "requested walk speed", which will be applied to actual physics in fixedUpdate.
