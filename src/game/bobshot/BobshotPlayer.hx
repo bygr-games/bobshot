@@ -926,7 +926,15 @@ class BobshotPlayer extends Entity {
 
 		// Shoot
 		if( ca.isPressed(Shoot) && !cd.hasSetS("playerShoot", 0.3) ) {
-			new Projectile(centerX + dir * 10, centerY - 2, dir, "basic", "enemy");
+			var rawAimX = ca.isDown(MoveRight) ? 1 : ca.isDown(MoveLeft) ? -1 : 0;
+			var rawAimY = ca.isDown(MoveDown) ? 1 : ca.isDown(MoveUp) ? -1 : 0;
+			var aimX:Float = rawAimX != 0 || rawAimY == 0 ? (rawAimX != 0 ? rawAimX : dir) : 0;
+			var aimY:Float = rawAimY;
+			if( rawAimX != 0 && rawAimY != 0 ) {
+				aimX = rawAimX * 0.7071;
+				aimY = rawAimY * 0.7071;
+			}
+			new Projectile(centerX + aimX * 10, centerY + aimY * 10 - 2, aimX > 0 ? 1 : -1, "basic", "enemy", aimX, aimY);
 			cd.setS("shootAnim", 0.1);
 		}
 

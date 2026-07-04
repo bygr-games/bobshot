@@ -25,12 +25,15 @@ class BaseProjectileStrategy implements ProjectileStrategy {
 		projectile.ihei = 4;
 		projectile.setPivots(0.5, 0.5);
 
-		projectile.vBase.setFricts(0.82, 1);
+		projectile.vBase.setFricts(0.82, 0.82);
 		if( lifetimeS!=null )
 			projectile.cd.setS("projectileLife", lifetimeS);
 
 		var b = new h2d.Bitmap(h2d.Tile.fromColor(projectileColor, projectile.iwid, projectile.ihei), projectile.spr);
 		b.tile.setCenterRatio(0.5, 0.5);
+
+		projectile.spr.rotation = Math.atan2(projectile.shotVelY, projectile.shotVelX);
+		projectile.dir = 1;
 	}
 
 	public function update(projectile:Projectile):Void {
