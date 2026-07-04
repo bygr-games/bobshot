@@ -14,14 +14,6 @@ import mitosis.projectiles.Projectile;
 class MitosisPlayer extends Entity {
 	static inline var BASE_WIDTH = 16;
 	static inline var BASE_HEIGHT = 32;
-	static inline var SPLIT_COUNT = 2;
-	static inline var SPLIT_MIN_SPEED_X = 0.22;
-	static inline var SPLIT_MAX_SPEED_X = 0.38;
-	static inline var SPLIT_MIN_SPEED_Y = 0.45;
-	static inline var SPLIT_MAX_SPEED_Y = 0.72;
-	static inline var SPLIT_SPAWN_SEARCH_STEP = 2.0;
-	static inline var SPLIT_SPAWN_SEARCH_RADIUS = 48.0;
-	static inline var SPLIT_SPAWN_SEARCH_HEIGHT = 32.0;
 	static inline var COLLISION_EPSILON = 0.001;
 	static inline var SPAWN_IMMUNITY_S = 1.0;
 	static inline var CAMERA_FIT_PADDING_X = 30.0;
@@ -194,15 +186,18 @@ class MitosisPlayer extends Entity {
 	}
 
 	function placeAtNearestSafeSplitPosition(baseAttachX:Float, baseAttachY:Float, preferredDir:Int) {
-		var horizontalSteps = M.ceil(SPLIT_SPAWN_SEARCH_RADIUS / SPLIT_SPAWN_SEARCH_STEP);
-		var verticalSteps = M.ceil(SPLIT_SPAWN_SEARCH_HEIGHT / SPLIT_SPAWN_SEARCH_STEP);
+		var step = 2.0;
+		var radius = 48.0;
+		var height = 32.0;
+		var horizontalSteps = M.ceil(radius / step);
+		var verticalSteps = M.ceil(height / step);
 
 		for( horizontalStep in 0...horizontalSteps+1 ) {
-			var preferredOffsetX = preferredDir * horizontalStep * SPLIT_SPAWN_SEARCH_STEP;
+			var preferredOffsetX = preferredDir * horizontalStep * step;
 			var alternateOffsetX = -preferredOffsetX;
 
 			for( verticalStep in 0...verticalSteps+1 ) {
-				var offsetY = -verticalStep * SPLIT_SPAWN_SEARCH_STEP;
+				var offsetY = -verticalStep * step;
 
 				if( isPlacementFreeAt(baseAttachX + preferredOffsetX, baseAttachY + offsetY) ) {
 					setPosPixel(baseAttachX + preferredOffsetX, baseAttachY + offsetY);
@@ -628,29 +623,6 @@ class MitosisPlayer extends Entity {
 		return getSizeData().vFric;
 	}
 
-	inline function hasNextSizeLevel() {
-		return sizeLevel < SIZE_LEVELS.length-1;
-	}
-
-	inline function isSmallestSize() {
-		return sizeLevel == SIZE_LEVELS.length-1;
-	}
-
-	inline function isEnemyThreat(from:Null<Entity>) {
-		if( from==null || !isSmallestSize() )
-			return false;
-
-		if( from.is(MitosisEnemy) )
-			return true;
-
-		if( from.is(Projectile) ) {
-			var projectile = from.as(Projectile);
-			return projectile!=null && projectile.targetType=="player";
-		}
-
-		return false;
-	}
-
 	function applySizeLevel() {
 		var size = getSizeData();
 		iwid = size.wid;
@@ -661,7 +633,7 @@ class MitosisPlayer extends Entity {
 	}
 
 	override public function hit(dmg:Int, from:Null<Entity>) {
-		if( isSpawnImmune() || isEnemyThreat(from) )
+		if( isSpawnImmune() )
 			return;
 
 		super.hit(dmg, from);
@@ -779,30 +751,7 @@ class MitosisPlayer extends Entity {
 
 
 	override function onDie() {
-		var spawnX = attachX;
-		var spawnY = attachY;
-		var childSizeLevel = sizeLevel + 1;
-
-		if( hasNextSizeLevel() ) {
-			for( i in 0...SPLIT_COUNT ) {
-				var child = new MitosisPlayer(spawnX, spawnY, i==0, childSizeLevel);
-				child.placeAtNearestSafeSplitPosition(spawnX, spawnY, i==0 ? -1 : 1);
-				child.applySplitFling(i);
-			}
-		}
-
 		destroy();
-	}
-
-	function applySplitFling(index:Int) {
-		cancelVelocities();
-		var baseDir = index==0 ? -1 : 1;
-		var horizontalSpeed = rnd(SPLIT_MIN_SPEED_X, SPLIT_MAX_SPEED_X) * baseDir;
-		var verticalSpeed = -rnd(SPLIT_MIN_SPEED_Y, SPLIT_MAX_SPEED_Y);
-		var horizontalJitter = rnd(0, 0.12, true);
-		vBase.addX(horizontalSpeed + horizontalJitter);
-		vBase.addY(verticalSpeed);
-		dir = horizontalSpeed>=0 ? 1 : -1;
 	}
 
 	function resolveEnemyPush(enemy:MitosisEnemy) {
@@ -1034,7 +983,7 @@ class MitosisPlayer extends Entity {
 				if( !Lib.rectangleOverlaps(left, top, wid, hei, enemy.left, enemy.top, enemy.wid, enemy.hei) )
 					continue;
 
-				if( isSpawnImmune() || isSmallestSize() || enemy.isHarmless() )
+				if( isSpawnImmune() || enemy.isHarmless() )
 					resolveEnemyPush(enemy);
 				else {
 					kill(enemy);
