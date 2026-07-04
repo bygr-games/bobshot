@@ -40,7 +40,9 @@ class BobshotGame extends Game {
 			for( exitSpawn in level.data.l_Entities.all_PlayerExit )
 					{
 						var pivot = readPivot(exitSpawn, 0.5, 1.0);
-						new BobshotPlayerExit(exitSpawn.cx, exitSpawn.cy, pivot.x, pivot.y);
+						var rawVisible:Dynamic = Reflect.field(exitSpawn, "f_visible");
+						var visible = rawVisible == null || rawVisible == true;
+						new BobshotPlayerExit(exitSpawn.cx, exitSpawn.cy, visible, pivot.x, pivot.y);
 					}
 		}
 

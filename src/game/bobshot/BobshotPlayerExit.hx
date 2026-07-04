@@ -5,11 +5,18 @@ class BobshotPlayerExit extends Entity {
 	static inline var MAX_TAG_VALUE = 100;
 
 	var currentTag : Null<String>;
+	var visible : Bool;
 
-	public function new(cx:Int, cy:Int, ?pivotX:Null<Float>, ?pivotY:Null<Float>) {
+	public function new(cx:Int, cy:Int, visible=true, ?pivotX:Null<Float>, ?pivotY:Null<Float>) {
 		super(cx, cy, pivotX, pivotY);
+		this.visible = visible;
 		iwid = 16;
 		ihei = 48;
+		if( !visible ) {
+			entityVisible = false;
+			spr.visible = false;
+			return;
+		}
 		updateTag();
 	}
 
@@ -20,6 +27,8 @@ class BobshotPlayerExit extends Entity {
 	}
 
 	function updateTag() {
+		if( !visible )
+			return;
 		var nextTag = Std.string(getRoundedTag());
 		if( currentTag==nextTag )
 			return;
