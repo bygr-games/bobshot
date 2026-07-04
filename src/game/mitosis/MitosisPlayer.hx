@@ -41,6 +41,7 @@ class MitosisPlayer extends Entity {
 	var animRun : Null<String>;
 	var animJump : Null<String>;
 	var animFall : Null<String>;
+	var animShoot : Null<String>;
 	var currentAnim : Null<String>;
 
 	// This is TRUE if the player is not falling
@@ -670,6 +671,10 @@ class MitosisPlayer extends Entity {
 			"samplePlayer_fall",
 			"sample_player_fall"
 		]);
+		animShoot = resolveFirstExisting([
+			"shoot",
+			"player_shoot"
+		]);
 
 		if( animIdle!=null )
 			applyAnim(animIdle);
@@ -733,7 +738,9 @@ class MitosisPlayer extends Entity {
 	function updateAnimState() {
 		var next : Null<String>;
 
-		if( !isOnGroundNow() )
+		if( cd.has("shootAnim") && animShoot!=null )
+			next = animShoot;
+		else if( !isOnGroundNow() )
 			next = dyTotal<0 ? (animJump!=null ? animJump : animIdle) : (animFall!=null ? animFall : animIdle);
 		else if( M.fabs(dxTotal)>0.03 )
 			next = animRun!=null ? animRun : animIdle;
@@ -908,8 +915,10 @@ class MitosisPlayer extends Entity {
 		}
 
 		// Shoot
-		if( ca.isPressed(Shoot) && !cd.hasSetS("playerShoot", 0.3) )
+		if( ca.isPressed(Shoot) && !cd.hasSetS("playerShoot", 0.3) ) {
 			new Projectile(centerX + dir * 10, centerY - 2, dir, "basic", "enemy");
+			cd.setS("shootAnim", 0.1);
+		}
 
 		// Walk
 		if( !isChargingAction() && ca.getAnalogDist2(MoveLeft,MoveRight)>0 ) {
