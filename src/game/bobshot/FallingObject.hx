@@ -1,6 +1,6 @@
-package mitosis;
+package bobshot;
 
-import mitosis.enemies.MitosisEnemy;
+import bobshot.enemies.BobshotEnemy;
 
 class FallingObject extends Entity {
 	static inline var GRAVITY = 0.05;
@@ -58,10 +58,10 @@ class FallingObject extends Entity {
 
 	function crushCollidingNonHazardEnemies() {
 		for( e in Entity.ALL ) {
-			if( e.destroyed || !e.is(MitosisEnemy) )
+			if( e.destroyed || !e.is(BobshotEnemy) )
 				continue;
 
-			var enemy = e.as(MitosisEnemy);
+			var enemy = e.as(BobshotEnemy);
 			if( enemy.isHazard() )
 				continue;
 

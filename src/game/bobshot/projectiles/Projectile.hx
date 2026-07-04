@@ -1,7 +1,7 @@
-﻿package mitosis.projectiles;
+﻿package bobshot.projectiles;
 
-import mitosis.enemies.MitosisEnemy;
-import mitosis.MitosisPlayer;
+import bobshot.enemies.BobshotEnemy;
+import bobshot.BobshotPlayer;
 
 class Projectile extends Entity {
 	var strategy : ProjectileStrategy;
@@ -86,11 +86,11 @@ class Projectile extends Entity {
 		switch( targetType ) {
 			case "player":
 				for( e in Entity.ALL ) {
-					if( e.destroyed || !e.is(MitosisPlayer) )
+					if( e.destroyed || !e.is(BobshotPlayer) )
 						continue;
 
 					if( Lib.rectangleOverlaps(left, top, wid, hei, e.left, e.top, e.wid, e.hei) ) {
-						var player = e.as(MitosisPlayer);
+						var player = e.as(BobshotPlayer);
 						player.kill(this);
 						strategy.onPlayerHit(this, player);
 						break;
@@ -99,11 +99,11 @@ class Projectile extends Entity {
 
 			default:
 				for( e in Entity.ALL ) {
-					if( e.destroyed || !e.is(MitosisEnemy) )
+					if( e.destroyed || !e.is(BobshotEnemy) )
 						continue;
 
 					if( Lib.rectangleOverlaps(left, top, wid, hei, e.left, e.top, e.wid, e.hei) ) {
-						var enemy = e.as(MitosisEnemy);
+						var enemy = e.as(BobshotEnemy);
 						enemy.kill(this);
 						strategy.onEnemyHit(this, enemy);
 						break;
@@ -113,11 +113,11 @@ class Projectile extends Entity {
 
 		// Check for falling object collisions (affects any projectile)
 		for( e in Entity.ALL ) {
-			if( e.destroyed || !e.is(mitosis.FallingObject) )
+			if( e.destroyed || !e.is(bobshot.FallingObject) )
 				continue;
 
 			if( Lib.rectangleOverlaps(left, top, wid, hei, e.left, e.top, e.wid, e.hei) ) {
-				var fallingObject = e.as(mitosis.FallingObject);
+				var fallingObject = e.as(bobshot.FallingObject);
 				fallingObject.startFalling();
 				break;
 			}

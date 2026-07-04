@@ -1,7 +1,7 @@
-﻿package mitosis.enemies;
+﻿package bobshot.enemies;
 
-import mitosis.MitosisPlayer;
-import mitosis.projectiles.Projectile;
+import bobshot.BobshotPlayer;
+import bobshot.projectiles.Projectile;
 
 class ShootingEnemyStrategy extends BaseEnemyStrategy {
 	var minShootIntervalS = 1.5;
@@ -12,12 +12,12 @@ class ShootingEnemyStrategy extends BaseEnemyStrategy {
 		super();
 	}
 
-	override public function initHitbox(enemy:MitosisEnemy):Void {
+	override public function initHitbox(enemy:BobshotEnemy):Void {
 		setHitbox(enemy, 16, 32);
 		enemy.cd.setS("shootingEnemyShoot", enemy.rnd(0, maxInitialShootDelayS));
 	}
 
-	override public function update(enemy:MitosisEnemy):Void {
+	override public function update(enemy:BobshotEnemy):Void {
 		applyGravityIfAirborne(enemy);
 
 		var shootUpward = hasAnyPlayerOnTop(enemy);
@@ -37,19 +37,19 @@ class ShootingEnemyStrategy extends BaseEnemyStrategy {
 		}
 	}
 
-	function getClosestPlayer(enemy:MitosisEnemy):MitosisPlayer {
+	function getClosestPlayer(enemy:BobshotEnemy):BobshotPlayer {
 		return findClosestPlayer(enemy, function(origin, player) {
 			return M.fabs(player.centerX - origin.centerX);
 		});
 	}
 
-	function hasAnyPlayerOnTop(enemy:MitosisEnemy):Bool {
+	function hasAnyPlayerOnTop(enemy:BobshotEnemy):Bool {
 		return hasAnyPlayer(enemy, function(origin, player) {
 			return isPlayerOnTop(origin, player);
 		});
 	}
 
-	function isPlayerOnTop(enemy:MitosisEnemy, player:MitosisPlayer):Bool {
+	function isPlayerOnTop(enemy:BobshotEnemy, player:BobshotPlayer):Bool {
 		return player.right > enemy.left + 2
 			&& player.left < enemy.right - 2
 			&& player.bottom <= enemy.top + 6;

@@ -1,7 +1,7 @@
-﻿package mitosis.enemies;
+﻿package bobshot.enemies;
 
-import mitosis.MitosisPlayer;
-import mitosis.projectiles.Projectile;
+import bobshot.BobshotPlayer;
+import bobshot.projectiles.Projectile;
 
 private typedef EnemyTypeDef = {
 	var id : String;
@@ -15,7 +15,7 @@ private typedef EnemyTypeDef = {
 }
 
 /**
-	MitosisEnemy is an Entity that spawns from level data and exhibits different
+	BobshotEnemy is an Entity that spawns from level data and exhibits different
 	behaviors based on its strategy pattern implementation.
 	
 	Supported types:
@@ -25,7 +25,7 @@ private typedef EnemyTypeDef = {
 	- "scared": runs away from nearby players and does not hurt them on contact
 	- "spike": stays in place and splits players on contact
 **/
-class MitosisEnemy extends Entity {
+class BobshotEnemy extends Entity {
 	public static inline var COLLISION_EPSILON = 0.001;
 	static inline var DEFAULT_ENEMY_TYPE = "saw";
 	static final ENEMY_DEFS = initEnemyDefs();
@@ -426,8 +426,8 @@ class MitosisEnemy extends Entity {
 
 		if( !isHazard() ) {
 			for( e in Entity.ALL )
-				if( !e.destroyed && e!=this && e.is(MitosisEnemy) ) {
-					var other = e.as(MitosisEnemy);
+				if( !e.destroyed && e!=this && e.is(BobshotEnemy) ) {
+					var other = e.as(BobshotEnemy);
 					if( !other.isAlive() || !other.isHazard() )
 						continue;
 

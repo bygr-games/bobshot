@@ -1,11 +1,11 @@
-﻿package mitosis;
+﻿package bobshot;
 
-import mitosis.enemies.MitosisEnemy;
+import bobshot.enemies.BobshotEnemy;
 
 /**
 	This small class creates game entities (player and enemies) from level data
 **/
-class MitosisGame extends Game {
+class BobshotGame extends Game {
 	public function new() {
 		super();
 	}
@@ -40,7 +40,7 @@ class MitosisGame extends Game {
 			for( exitSpawn in level.data.l_Entities.all_PlayerExit )
 					{
 						var pivot = readPivot(exitSpawn, 0.5, 1.0);
-						new MitosisPlayerExit(exitSpawn.cx, exitSpawn.cy, pivot.x, pivot.y);
+						new BobshotPlayerExit(exitSpawn.cx, exitSpawn.cy, pivot.x, pivot.y);
 					}
 		}
 
@@ -54,19 +54,19 @@ class MitosisGame extends Game {
 				if( rawRequired==null )
 					rawRequired = Reflect.field(recombobulatorSpawn, "RequiredPercentage");
 				var requiredPercentage = rawRequired==null ? 0.0 : cast rawRequired;
-				new MitosisRecombobulator(cx, cy, requiredPercentage, pivot.x, pivot.y);
+				new BobshotRecombobulator(cx, cy, requiredPercentage, pivot.x, pivot.y);
 			}
 		}
 		
 		// Spawn player
-		new MitosisPlayer();
+		new BobshotPlayer();
 
 		// Spawn saw enemies
 		if( level.data.l_Entities.all_SawEnemy != null ) {
 			for( sawSpawn in level.data.l_Entities.all_SawEnemy )
 				{
 					var pivot = readPivot(sawSpawn, 0.5, 1.0);
-					new MitosisEnemy(sawSpawn.cx, sawSpawn.cy, "saw", pivot.x, pivot.y);
+					new BobshotEnemy(sawSpawn.cx, sawSpawn.cy, "saw", pivot.x, pivot.y);
 				}
 		}
 
@@ -75,7 +75,7 @@ class MitosisGame extends Game {
 			for( redSpawn in level.data.l_Entities.all_RedEnemy )
 				{
 					var pivot = readPivot(redSpawn, 0.5, 1.0);
-					new MitosisEnemy(redSpawn.cx, redSpawn.cy, "red", pivot.x, pivot.y);
+					new BobshotEnemy(redSpawn.cx, redSpawn.cy, "red", pivot.x, pivot.y);
 				}
 		}
 
@@ -84,7 +84,7 @@ class MitosisGame extends Game {
 			for( shootingSpawn in level.data.l_Entities.all_ShootingEnemy )
 				{
 					var pivot = readPivot(shootingSpawn, 0.5, 1.0);
-					new MitosisEnemy(shootingSpawn.cx, shootingSpawn.cy, "shooting", pivot.x, pivot.y);
+					new BobshotEnemy(shootingSpawn.cx, shootingSpawn.cy, "shooting", pivot.x, pivot.y);
 				}
 		}
 
@@ -93,7 +93,7 @@ class MitosisGame extends Game {
 			for( scaredSpawn in level.data.l_Entities.all_ScaredEnemy )
 				{
 					var pivot = readPivot(scaredSpawn, 0.5, 1.0);
-					new MitosisEnemy(scaredSpawn.cx, scaredSpawn.cy, "scared", pivot.x, pivot.y);
+					new BobshotEnemy(scaredSpawn.cx, scaredSpawn.cy, "scared", pivot.x, pivot.y);
 				}
 		}
 
@@ -102,7 +102,7 @@ class MitosisGame extends Game {
 			for( spikeSpawn in level.data.l_Entities.all_SpikeEnemy )
 				{
 					var pivot = readPivot(spikeSpawn, 0.5, 1.0);
-					new MitosisEnemy(spikeSpawn.cx, spikeSpawn.cy, "spike", pivot.x, pivot.y);
+					new BobshotEnemy(spikeSpawn.cx, spikeSpawn.cy, "spike", pivot.x, pivot.y);
 				}
 		}
 

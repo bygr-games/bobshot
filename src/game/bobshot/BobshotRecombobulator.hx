@@ -1,6 +1,6 @@
-﻿package mitosis;
+﻿package bobshot;
 
-class MitosisRecombobulator extends Entity {
+class BobshotRecombobulator extends Entity {
 	static inline var TAG_STEP = 10;
 	static inline var MAX_TAG_VALUE = 100;
 	static inline var REQUIRED_EPSILON = 0.001;
@@ -58,8 +58,8 @@ class MitosisRecombobulator extends Entity {
 
 	function hasPendingPulledPlayers() {
 		for( e in Entity.ALL )
-			if( !e.destroyed && e.is(MitosisPlayer) ) {
-				var player = e.as(MitosisPlayer);
+			if( !e.destroyed && e.is(BobshotPlayer) ) {
+				var player = e.as(BobshotPlayer);
 				if( player.isBeingPulledInto(this) )
 					return true;
 			}
@@ -74,7 +74,7 @@ class MitosisRecombobulator extends Entity {
 		hasSpawnedPlayer = true;
 		var spawnX = right + Const.GRID * 0.5;
 		var spawnY = attachY;
-		new MitosisPlayer(spawnX, spawnY, true);
+		new BobshotPlayer(spawnX, spawnY, true);
 	}
 
 	function startPullSequence() {
@@ -83,8 +83,8 @@ class MitosisRecombobulator extends Entity {
 
 		pullStarted = true;
 		for( e in Entity.ALL )
-			if( !e.destroyed && e.is(MitosisPlayer) ) {
-				var player = e.as(MitosisPlayer);
+			if( !e.destroyed && e.is(BobshotPlayer) ) {
+				var player = e.as(BobshotPlayer);
 				if( !player.isAlive() )
 					continue;
 
@@ -97,8 +97,8 @@ class MitosisRecombobulator extends Entity {
 			return;
 
 		for( e in Entity.ALL )
-			if( !e.destroyed && e.is(MitosisPlayer) ) {
-				var player = e.as(MitosisPlayer);
+			if( !e.destroyed && e.is(BobshotPlayer) ) {
+				var player = e.as(BobshotPlayer);
 				if( !player.isBeingPulledInto(this) )
 					continue;
 

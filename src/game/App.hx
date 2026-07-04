@@ -121,7 +121,7 @@ class App extends dn.Process {
 
 	final function _createGameInstance() {
 		// new Game(); // <---- Uncomment this to start an empty Game instance
-		new mitosis.MitosisGame(); // <---- Uncomment this to start the Sample Game instance
+		new bobshot.BobshotGame(); // <---- Uncomment this to start the Sample Game instance
 	}
 
 

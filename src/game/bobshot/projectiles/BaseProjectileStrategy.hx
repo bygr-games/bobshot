@@ -1,7 +1,7 @@
-﻿package mitosis.projectiles;
+﻿package bobshot.projectiles;
 
-import mitosis.enemies.MitosisEnemy;
-import mitosis.MitosisPlayer;
+import bobshot.enemies.BobshotEnemy;
+import bobshot.BobshotPlayer;
 
 class BaseProjectileStrategy implements ProjectileStrategy {
 	var speed : Float;
@@ -67,12 +67,12 @@ class BaseProjectileStrategy implements ProjectileStrategy {
 		projectile.destroy();
 	}
 
-	public function onEnemyHit(projectile:Projectile, enemy:MitosisEnemy):Void {
+	public function onEnemyHit(projectile:Projectile, enemy:BobshotEnemy):Void {
 		emitImpact(enemy.centerX, enemy.centerY, targetImpactColor);
 		projectile.destroy();
 	}
 
-	public function onPlayerHit(projectile:Projectile, player:MitosisPlayer):Void {
+	public function onPlayerHit(projectile:Projectile, player:BobshotPlayer):Void {
 		emitImpact(player.centerX, player.centerY, targetImpactColor);
 		projectile.destroy();
 	}

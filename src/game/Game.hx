@@ -45,7 +45,7 @@ class Game extends AppChildProcess {
 		if( orderedLevels.length>0 )
 			startLevel(orderedLevels[0]);
 		else
-			startLevel(Assets.worldData.all_worlds.MitosisWorld.all_levels.Level_0);
+			startLevel(Assets.worldData.all_worlds.BobshotWorld.all_levels.Level_0);
 	}
 
 
@@ -79,7 +79,7 @@ class Game extends AppChildProcess {
 
 	function getOrderedWorldLevels() : Array<World.World_Level> {
 		var orderedLevels : Array<World.World_Level> = [];
-		var raw:Dynamic = haxe.Json.parse(hxd.Res.levels.mitosisWorld.entry.getText());
+		var raw:Dynamic = haxe.Json.parse(hxd.Res.levels.bobshotWorld.entry.getText());
 		var worlds:Array<Dynamic> = cast Reflect.field(raw, "worlds");
 
 		if( worlds!=null && worlds.length>0 ) {
@@ -88,7 +88,7 @@ class Game extends AppChildProcess {
 				for( levelData in levels ) {
 					var uid:Null<Int> = cast Reflect.field(levelData, "uid");
 					if( uid!=null ) {
-						var l = Assets.worldData.all_worlds.MitosisWorld.getLevel(uid);
+						var l = Assets.worldData.all_worlds.BobshotWorld.getLevel(uid);
 						if( l!=null )
 							orderedLevels.push(l);
 					}
@@ -99,7 +99,7 @@ class Game extends AppChildProcess {
 		if( orderedLevels.length>0 )
 			return orderedLevels;
 
-		var allLevels:Dynamic = Assets.worldData.all_worlds.MitosisWorld.all_levels;
+		var allLevels:Dynamic = Assets.worldData.all_worlds.BobshotWorld.all_levels;
 		for( levelId in Reflect.fields(allLevels) ) {
 			var l:World.World_Level = cast Reflect.field(allLevels, levelId);
 			if( l!=null )
@@ -132,7 +132,7 @@ class Game extends AppChildProcess {
 		if( level==null )
 			return;
 
-		startLevel(Assets.worldData.all_worlds.MitosisWorld.getLevel(level.data.uid));
+		startLevel(Assets.worldData.all_worlds.BobshotWorld.getLevel(level.data.uid));
 	}
 
 
@@ -149,7 +149,7 @@ class Game extends AppChildProcess {
 	function onLdtkReload() {
 		hud.notify("LDtk reloaded");
 		if( level!=null )
-			startLevel( Assets.worldData.all_worlds.MitosisWorld.getLevel(level.data.uid) );
+			startLevel( Assets.worldData.all_worlds.BobshotWorld.getLevel(level.data.uid) );
 	}
 
 	/** Window/app resize event **/

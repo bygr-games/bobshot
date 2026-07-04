@@ -1,4 +1,4 @@
-﻿package mitosis.projectiles;
+﻿package bobshot.projectiles;
 
 class BasicProjectileStrategy extends BaseProjectileStrategy {
 

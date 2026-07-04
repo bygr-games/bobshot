@@ -1,6 +1,6 @@
-﻿package mitosis;
+﻿package bobshot;
 
-class MitosisPlayerExit extends Entity {
+class BobshotPlayerExit extends Entity {
 	static inline var TAG_STEP = 10;
 	static inline var MAX_TAG_VALUE = 100;
 

@@ -31,7 +31,7 @@ class Level extends GameChildProcess {
 		pxWid = cWid * Const.GRID;
 		pxHei = cHei * Const.GRID;
 		requiredPercentage = readRequiredPercentage();
-		tilesetSource = hxd.Res.levels.mitosisWorldTiles.toAseprite().toTile();
+		tilesetSource = hxd.Res.levels.bobshotWorldTiles.toAseprite().toTile();
 		overlayRoot = new h2d.Object();
 		Game.ME.scroller.add(overlayRoot, Const.DP_FRONT);
 
