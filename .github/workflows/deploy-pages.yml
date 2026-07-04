@@ -1,0 +1,65 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Haxe
+        uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: 4.3.3
+
+      - name: Show Haxe version
+        run: haxe -version
+
+      - name: Install dependencies
+        run: haxe setup.hxml
+
+      - name: Build JS target
+        run: haxe build.js.hxml
+
+      - name: Prepare site artifact
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path site -Force | Out-Null
+          Copy-Item -Path run_js.html -Destination site/index.html
+          Copy-Item -Path bin -Destination site/bin -Recurse -Force
+          Copy-Item -Path res -Destination site/res -Recurse -Force
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
