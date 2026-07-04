@@ -637,7 +637,17 @@ class MitosisPlayer extends Entity {
 		if( isSpawnImmune() )
 			return;
 
-		super.hit(dmg, from);
+		// Set invulnerability
+		ucd.setS("spawnImmunity", SPAWN_IMMUNITY_S);
+
+		// Push back away from damage source
+		var pushDir = from == null ? dir : (centerX < from.centerX ? -1 : 1);
+		cancelVelocities();
+		bump(pushDir * 0.8, -0.35);
+		setSquashX(0.6);
+
+		fx.dotsExplosionExample(centerX, centerY, 0xff0000);
+		ca.rumble(0.2, 0.15);
 	}
 
 	override function postUpdate() {
