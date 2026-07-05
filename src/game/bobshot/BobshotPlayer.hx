@@ -37,6 +37,7 @@ class BobshotPlayer extends Entity {
 	var sizeLevel(default,null) : Int;
 	var pullTarget : Null<BobshotRecombobulator>;
 	var flyingMode = false;
+	static var currentSkin = 1;
 
 	var animIdle : Null<String>;
 	var animRun : Null<String>;
@@ -83,6 +84,21 @@ class BobshotPlayer extends Entity {
 	public function clearFlyingMode() {
 		if( flyingMode ) {
 			flyingMode = false;
+			currentAnim = null;
+		}
+	}
+
+	inline function getBaseSkinLib() {
+		return currentSkin==2 ? Assets.player2 : Assets.player;
+	}
+
+	inline function getFlyingSkinLib() {
+		return currentSkin==2 ? Assets.player2Flying : Assets.playerFlying;
+	}
+
+	inline function switchSkin(v:Int) {
+		if( currentSkin!=v ) {
+			currentSkin = v;
 			currentAnim = null;
 		}
 	}
@@ -719,7 +735,7 @@ class BobshotPlayer extends Entity {
 	}
 
 	inline function getPlayerLib() {
-		return flyingMode ? Assets.playerFlying : Assets.player;
+		return flyingMode ? getFlyingSkinLib() : getBaseSkinLib();
 	}
 
 	function resolveFirstExisting(candidates:Array<String>) : Null<String> {
@@ -948,6 +964,11 @@ class BobshotPlayer extends Entity {
 			fx.dotsExplosionExample(centerX, centerY, 0xffcc00);
 			ca.rumble(0.05, 0.06);
 		}
+
+		if( ca.isKeyboardPressed(K.NUMBER_1) )
+			switchSkin(1);
+		if( ca.isKeyboardPressed(K.NUMBER_2) )
+			switchSkin(2);
 
 		// Shoot
 		if( ca.isPressed(Shoot) && !cd.hasSetS("playerShoot", 0.3) ) {
