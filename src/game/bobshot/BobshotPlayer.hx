@@ -74,11 +74,17 @@ class BobshotPlayer extends Entity {
 	}
 
 	public function enableFlyingMode() {
-		flyingMode = true;
+		if( !flyingMode ) {
+			flyingMode = true;
+			currentAnim = null;
+		}
 	}
 
 	public function clearFlyingMode() {
-		flyingMode = false;
+		if( flyingMode ) {
+			flyingMode = false;
+			currentAnim = null;
+		}
 	}
 
 	inline function overlapsPlayerX(other:BobshotPlayer) {
@@ -712,9 +718,14 @@ class BobshotPlayer extends Entity {
 		fallbackBitmap.tile.setCenterRatio(0.5,1);
 	}
 
+	inline function getPlayerLib() {
+		return flyingMode ? Assets.playerFlying : Assets.player;
+	}
+
 	function resolveFirstExisting(candidates:Array<String>) : Null<String> {
+		var playerLib = getPlayerLib();
 		for( id in candidates )
-			if( Assets.player.exists(id) )
+			if( playerLib.exists(id) )
 				return id;
 		return null;
 	}
@@ -750,7 +761,7 @@ class BobshotPlayer extends Entity {
 			return;
 
 		currentAnim = group;
-		spr.set(Assets.player, group, 0);
+		spr.set(getPlayerLib(), group, 0);
 
 		if( spr.group!=null && spr.group.anim!=null && spr.group.anim.length>0 )
 			spr.anim.playAndLoop(group);

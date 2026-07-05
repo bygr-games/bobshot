@@ -14,6 +14,7 @@ class Assets {
 	public static var tiles : SpriteLib;
 	/** Player atlas **/
 	public static var player : SpriteLib;
+	public static var playerFlying : SpriteLib;
 	/** Enemy atlases **/
 	public static var enemyRed : SpriteLib;
 	public static var enemySaw : SpriteLib;
@@ -42,6 +43,7 @@ class Assets {
 		// build sprite atlas directly from Aseprite file
 		tiles = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.tiles.toAseprite());
 		player = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.player.toAseprite());
+		playerFlying = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.player_flying.toAseprite());
 		enemyRed = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_red.toAseprite());
 		enemySaw = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_saw.toAseprite());
 		enemyShooting = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_shooting.toAseprite());
@@ -106,6 +108,7 @@ class Assets {
 
 		tiles.tmod = tmod;
 		player.tmod = tmod;
+		playerFlying.tmod = tmod;
 		enemyRed.tmod = tmod;
 		enemySaw.tmod = tmod;
 		enemyShooting.tmod = tmod;
