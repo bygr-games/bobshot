@@ -14,6 +14,7 @@ class Assets {
 	public static var tiles : SpriteLib;
 	/** Player atlas **/
 	public static var player : SpriteLib;
+	public static var playerFlying : SpriteLib;
 	/** Enemy atlases **/
 	public static var enemyRed : SpriteLib;
 	public static var enemySaw : SpriteLib;
@@ -21,6 +22,7 @@ class Assets {
 	public static var enemyScared : SpriteLib;
 	public static var enemySpike : SpriteLib;
 	public static var enemyBig : SpriteLib;
+	public static var potionFlying : SpriteLib;
 	public static var playerExit : SpriteLib;
 	public static var recombobulator : SpriteLib;
 
@@ -41,12 +43,14 @@ class Assets {
 		// build sprite atlas directly from Aseprite file
 		tiles = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.tiles.toAseprite());
 		player = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.player.toAseprite());
+		playerFlying = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.player_flying.toAseprite());
 		enemyRed = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_red.toAseprite());
 		enemySaw = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_saw.toAseprite());
 		enemyShooting = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_shooting.toAseprite());
 		enemyScared = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_scared.toAseprite());
 		enemySpike = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_spike.toAseprite());
 		enemyBig = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_big.toAseprite());
+		potionFlying = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.potion_flying.toAseprite());
 		playerExit = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.playerExit.toAseprite());
 		recombobulator = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.recombobulator.toAseprite());
 
@@ -104,12 +108,14 @@ class Assets {
 
 		tiles.tmod = tmod;
 		player.tmod = tmod;
+		playerFlying.tmod = tmod;
 		enemyRed.tmod = tmod;
 		enemySaw.tmod = tmod;
 		enemyShooting.tmod = tmod;
 		enemyScared.tmod = tmod;
 		enemySpike.tmod = tmod;
 		enemyBig.tmod = tmod;
+		potionFlying.tmod = tmod;
 		playerExit.tmod = tmod;
 		recombobulator.tmod = tmod;
 		// <-- add other atlas TMOD updates here

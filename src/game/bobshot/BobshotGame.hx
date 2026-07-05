@@ -120,6 +120,15 @@ class BobshotGame extends Game {
 				}
 		}
 
+		// Spawn flying potions
+		if( level.data.l_Entities.all_FlyingPotion != null ) {
+			for( potionSpawn in level.data.l_Entities.all_FlyingPotion )
+				{
+					var pivot = readPivot(potionSpawn, 0.5, 1.0);
+					new FlyingPotion(potionSpawn.cx, potionSpawn.cy, pivot.x, pivot.y);
+				}
+		}
+
 		// Spawn falling objects
 		var fallingObjectSpawns:Array<Dynamic> = cast Reflect.field(level.data.l_Entities, "all_FallingObject");
 		if( fallingObjectSpawns != null ) {

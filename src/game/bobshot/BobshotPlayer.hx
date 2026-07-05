@@ -36,6 +36,7 @@ class BobshotPlayer extends Entity {
 	var fallbackBitmap : Null<h2d.Bitmap>;
 	var sizeLevel(default,null) : Int;
 	var pullTarget : Null<BobshotRecombobulator>;
+	var flyingMode = false;
 
 	var animIdle : Null<String>;
 	var animRun : Null<String>;
@@ -66,6 +67,24 @@ class BobshotPlayer extends Entity {
 
 	inline function collidesWithEnemies() {
 		return isSpawnImmune();
+	}
+
+	public inline function hasFlyingMode() {
+		return flyingMode;
+	}
+
+	public function enableFlyingMode() {
+		if( !flyingMode ) {
+			flyingMode = true;
+			currentAnim = null;
+		}
+	}
+
+	public function clearFlyingMode() {
+		if( flyingMode ) {
+			flyingMode = false;
+			currentAnim = null;
+		}
 	}
 
 	inline function overlapsPlayerX(other:BobshotPlayer) {
@@ -699,9 +718,14 @@ class BobshotPlayer extends Entity {
 		fallbackBitmap.tile.setCenterRatio(0.5,1);
 	}
 
+	inline function getPlayerLib() {
+		return flyingMode ? Assets.playerFlying : Assets.player;
+	}
+
 	function resolveFirstExisting(candidates:Array<String>) : Null<String> {
+		var playerLib = getPlayerLib();
 		for( id in candidates )
-			if( Assets.player.exists(id) )
+			if( playerLib.exists(id) )
 				return id;
 		return null;
 	}
@@ -737,7 +761,7 @@ class BobshotPlayer extends Entity {
 			return;
 
 		currentAnim = group;
-		spr.set(Assets.player, group, 0);
+		spr.set(getPlayerLib(), group, 0);
 
 		if( spr.group!=null && spr.group.anim!=null && spr.group.anim.length>0 )
 			spr.anim.playAndLoop(group);
@@ -916,10 +940,11 @@ class BobshotPlayer extends Entity {
 
 
 		// Jump
-		if( cd.has("recentlyOnGround") && ca.isPressed(Jump) ) {
+		if( (cd.has("recentlyOnGround") || flyingMode) && ca.isPressed(Jump) ) {
 			vBase.addY(-0.85);
 			setSquashX(0.6);
-			cd.unset("recentlyOnGround");
+			if( !flyingMode )
+				cd.unset("recentlyOnGround");
 			fx.dotsExplosionExample(centerX, centerY, 0xffcc00);
 			ca.rumble(0.05, 0.06);
 		}
@@ -985,6 +1010,7 @@ class BobshotPlayer extends Entity {
 					continue;
 
 				if( !cd.hasSetS("levelExit", 0.2) ) {
+					clearFlyingMode();
 					var shouldStartNextLevel = level.registerCompletedPercentage(getCompletionPercentage());
 					destroy();
 					if( shouldStartNextLevel )
@@ -1005,6 +1031,17 @@ class BobshotPlayer extends Entity {
 				recombobulator.absorbPercentage(getCompletionPercentage());
 				destroy();
 				return;
+			}
+
+		// Collect flying potion
+		for( e in Entity.ALL )
+			if( !e.destroyed && e.is(bobshot.FlyingPotion) ) {
+				var potion = e.as(bobshot.FlyingPotion);
+				if( !Lib.rectangleOverlaps(left, top, wid, hei, potion.left, potion.top, potion.wid, potion.hei) )
+					continue;
+
+				enableFlyingMode();
+				potion.destroy();
 			}
 
 		// Enemy body contact
