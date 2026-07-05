@@ -8,5 +8,6 @@
 -lib heaps-aseprite
 
 -D useProcessTweenie
+-lib hlopenal
 
 -main Boot

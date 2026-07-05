@@ -8,6 +8,9 @@ import bobshot.enemies.BobshotEnemy;
 class BobshotGame extends Game {
 	public function new() {
 		super();
+
+		// Start background music
+		var channel = hxd.Res.sound.bkg.play(true, 1.0);
 	}
 
 	function readPivot(spawn:Dynamic, defaultX:Float=0.5, defaultY:Float=1.0) {
