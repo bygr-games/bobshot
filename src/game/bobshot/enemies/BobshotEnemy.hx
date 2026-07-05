@@ -1,6 +1,7 @@
 ﻿package bobshot.enemies;
 
 import bobshot.BobshotPlayer;
+import bobshot.NegativeColorShader;
 import bobshot.projectiles.Projectile;
 
 private typedef EnemyTypeDef = {
@@ -9,9 +10,11 @@ private typedef EnemyTypeDef = {
 	var spriteLib : Void->SpriteLib;
 	var harmless : Bool;
 	var hazard : Bool;
+	var reactsToNonLethalHits : Bool;
 	var fallbackColor : Int;
 	var useInBoundsWallCollision : Bool;
 	var despawnAfterLeavingLevel : Bool;
+	var hitsToKill : Int;
 }
 
 /**
@@ -35,6 +38,7 @@ class BobshotEnemy extends Entity {
 	var enemyDef : EnemyTypeDef;
 	var enemyLib : SpriteLib;
 	var fallbackBitmap : Null<h2d.Bitmap>;
+	var immunityShader : NegativeColorShader;
 
 	var animIdle : Null<String>;
 	var animRun : Null<String>;
@@ -52,9 +56,11 @@ class BobshotEnemy extends Entity {
 			spriteLib: function() return Assets.enemySaw,
 			harmless: false,
 			hazard: true,
+			reactsToNonLethalHits: false,
 			fallbackColor: 0x0000FF,
 			useInBoundsWallCollision: false,
 			despawnAfterLeavingLevel: false,
+			hitsToKill: 1,
 		});
 
 		defs.set("red", {
@@ -63,9 +69,11 @@ class BobshotEnemy extends Entity {
 			spriteLib: function() return Assets.enemyRed,
 			harmless: false,
 			hazard: false,
+			reactsToNonLethalHits: true,
 			fallbackColor: 0xFF0000,
 			useInBoundsWallCollision: false,
 			despawnAfterLeavingLevel: false,
+			hitsToKill: 1,
 		});
 
 		defs.set("shooting", {
@@ -74,9 +82,11 @@ class BobshotEnemy extends Entity {
 			spriteLib: function() return Assets.enemyShooting,
 			harmless: true,
 			hazard: false,
+			reactsToNonLethalHits: true,
 			fallbackColor: 0x008000,
 			useInBoundsWallCollision: false,
 			despawnAfterLeavingLevel: false,
+			hitsToKill: 1,
 		});
 
 		defs.set("scared", {
@@ -85,9 +95,11 @@ class BobshotEnemy extends Entity {
 			spriteLib: function() return Assets.enemyScared,
 			harmless: true,
 			hazard: false,
+			reactsToNonLethalHits: true,
 			fallbackColor: 0x7A7AFF,
 			useInBoundsWallCollision: true,
 			despawnAfterLeavingLevel: true,
+			hitsToKill: 1,
 		});
 
 		defs.set("spike", {
@@ -96,9 +108,24 @@ class BobshotEnemy extends Entity {
 			spriteLib: function() return Assets.enemySpike,
 			harmless: false,
 			hazard: true,
+			reactsToNonLethalHits: false,
 			fallbackColor: 0x666666,
 			useInBoundsWallCollision: false,
 			despawnAfterLeavingLevel: false,
+			hitsToKill: 1,
+		});
+
+		defs.set("big", {
+			id: "big",
+			createStrategy: function() return new BigEnemyStrategy(),
+			spriteLib: function() return Assets.enemyBig,
+			harmless: false,
+			hazard: true,
+			reactsToNonLethalHits: true,
+			fallbackColor: 0x8B4513,
+			useInBoundsWallCollision: false,
+			despawnAfterLeavingLevel: false,
+			hitsToKill: 5,
 		});
 
 		return defs;
@@ -235,6 +262,13 @@ class BobshotEnemy extends Entity {
 		strategy = enemyDef.createStrategy();
 
 		strategy.initHitbox(this);
+
+		if( enemyDef.hitsToKill > 1 )
+			initLife(enemyDef.hitsToKill);
+
+		immunityShader = new NegativeColorShader();
+		spr.addShader(immunityShader);
+
 		initGraphics();
 	}
 
@@ -330,9 +364,34 @@ class BobshotEnemy extends Entity {
 		applyAnim(next);
 	}
 
+	override public function hit(dmg:Int, from:Null<Entity>) {
+		if( enemyDef.reactsToNonLethalHits && cd.has("enemyHitImmunity") )
+			return;
+
+		var prevLife = life.v;
+		super.hit(dmg, from);
+
+		if( enemyDef.reactsToNonLethalHits && isAlive() && life.v<prevLife ) {
+			cd.setS("enemyHitImmunity", 0.5);
+			cancelVelocities();
+			var pushDir = from==null ? -dir : (from.centerX <= centerX ? 1 : -1);
+			bump(pushDir * 0.45, -0.22);
+		}
+	}
+
 	override function onDie() {
 		fx.enemyBloodBurst(centerX, centerY, 256);
 		super.onDie();
+	}
+
+	override public function kill(by:Null<Entity>) {
+		if( !isAlive() )
+			return;
+
+		if( enemyDef.hitsToKill > 1 )
+			hit(1, by);
+		else
+			super.kill(by);
 	}
 
 	override function dispose() {
@@ -341,6 +400,7 @@ class BobshotEnemy extends Entity {
 			strategy.dispose();
 			strategy = null;
 		}
+		immunityShader = null;
 	}
 
 	/** X collisions **/
@@ -400,6 +460,7 @@ class BobshotEnemy extends Entity {
 	**/
 	override function preUpdate() {
 		super.preUpdate();
+		immunityShader.intensity = cd.has("enemyHitImmunity") ? 1 : 0;
 	}
 
 	/**

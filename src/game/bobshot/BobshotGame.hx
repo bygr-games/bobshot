@@ -111,6 +111,15 @@ class BobshotGame extends Game {
 				}
 		}
 
+		// Spawn big enemies
+		if( level.data.l_Entities.all_BigEnemy != null ) {
+			for( bigSpawn in level.data.l_Entities.all_BigEnemy )
+				{
+					var pivot = readPivot(bigSpawn, 0.5, 1.0);
+					new BobshotEnemy(bigSpawn.cx, bigSpawn.cy, "big", pivot.x, pivot.y);
+				}
+		}
+
 		// Spawn falling objects
 		var fallingObjectSpawns:Array<Dynamic> = cast Reflect.field(level.data.l_Entities, "all_FallingObject");
 		if( fallingObjectSpawns != null ) {
