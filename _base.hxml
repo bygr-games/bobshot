@@ -8,6 +8,6 @@
 -lib heaps-aseprite
 
 -D useProcessTweenie
--lib hlopenal
+-cp lib/hlopenal
 
 -main Boot
