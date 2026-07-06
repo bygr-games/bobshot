@@ -7,6 +7,8 @@ class ShootingEnemyStrategy extends BaseEnemyStrategy {
 	var minShootIntervalS = 1.5;
 	var maxShootIntervalS = 3.0;
 	var maxInitialShootDelayS = 1.5;
+	var maxVisionDistancePx = 12 * Const.GRID;
+	var hasDetectedPlayer = false;
 
 	public function new() {
 		super();
@@ -21,8 +23,9 @@ class ShootingEnemyStrategy extends BaseEnemyStrategy {
 		applyGravityIfAirborne(enemy);
 
 		var shootUpward = hasAnyPlayerOnTop(enemy);
-		var closestPlayer = shootUpward ? null : getClosestPlayer(enemy);
+		var closestPlayer = shootUpward ? null : (hasDetectedPlayer ? getClosestPlayer(enemy) : getClosestNearbyPlayer(enemy));
 		if( shootUpward || closestPlayer!=null ) {
+			hasDetectedPlayer = true;
 			if( !shootUpward )
 				enemy.dir = closestPlayer.centerX >= enemy.centerX ? 1 : -1;
 
@@ -35,6 +38,12 @@ class ShootingEnemyStrategy extends BaseEnemyStrategy {
 					new Projectile(enemy.centerX + enemy.dir * 8, enemy.centerY - 4, enemy.dir, "violet", "player");
 			}
 		}
+	}
+
+	function getClosestNearbyPlayer(enemy:BobshotEnemy):BobshotPlayer {
+		return findClosestPlayer(enemy, function(origin, player) {
+			return M.fabs(player.centerX - origin.centerX);
+		}, maxVisionDistancePx);
 	}
 
 	function getClosestPlayer(enemy:BobshotEnemy):BobshotPlayer {
