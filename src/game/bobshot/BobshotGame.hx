@@ -6,12 +6,41 @@ import bobshot.enemies.BobshotEnemy;
 	This small class creates game entities (player and enemies) from level data
 **/
 class BobshotGame extends Game {
+	#if js
+	var webMusic : js.html.AudioElement;
+	#end
+
 	public function new() {
 		super();
-
-		// Start background music
-		var channel = hxd.Res.sound.bkg.play(true, 1.0);
+		startBackgroundMusic();
 	}
+
+	function startBackgroundMusic() {
+		#if js
+		if( webMusic!=null )
+			return;
+		webMusic = js.Browser.document.createAudioElement();
+		webMusic.src = "res/sound/bkg.ogg";
+		webMusic.loop = true;
+		webMusic.volume = 1.0;
+		js.Browser.document.body.appendChild(webMusic);
+		js.Browser.document.addEventListener("click", onFirstUserInput);
+		js.Browser.document.addEventListener("keydown", onFirstUserInput);
+		js.Browser.document.body.addEventListener("touchend", onFirstUserInput);
+		#else
+		hxd.Res.load("sound/bkg.ogg").toSound().play(true, 1.0);
+		#end
+	}
+
+	#if js
+	function onFirstUserInput(_ : js.html.Event) {
+		js.Browser.document.removeEventListener("click", onFirstUserInput);
+		js.Browser.document.removeEventListener("keydown", onFirstUserInput);
+		js.Browser.document.body.removeEventListener("touchend", onFirstUserInput);
+		if( webMusic!=null )
+			webMusic.play();
+	}
+	#end
 
 	function readPivot(spawn:Dynamic, defaultX:Float=0.5, defaultY:Float=1.0) {
 		var pivotX = defaultX;

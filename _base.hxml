@@ -8,7 +8,5 @@
 -lib heaps-aseprite
 
 -D useProcessTweenie
--cp lib/hlopenal
--D hlopenal=1.16.0
 
 -main Boot
