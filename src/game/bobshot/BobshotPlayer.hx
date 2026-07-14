@@ -758,6 +758,10 @@ class BobshotPlayer extends Entity {
 		return pullTarget==target && isBeingPulled();
 	}
 
+	public inline function getCurrentAnimTag() {
+		return currentAnim;
+	}
+
 	public function startPullInto(target:BobshotRecombobulator) {
 		if( target==null || destroyed || !isAlive() )
 			return;

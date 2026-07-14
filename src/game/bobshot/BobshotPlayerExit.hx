@@ -11,7 +11,7 @@ class BobshotPlayerExit extends Entity {
 		super(cx, cy, pivotX, pivotY);
 		this.visible = visible;
 		iwid = 16;
-		ihei = 48;
+		ihei = 16;
 		if( !visible ) {
 			entityVisible = false;
 			spr.visible = false;

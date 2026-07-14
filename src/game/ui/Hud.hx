@@ -8,6 +8,8 @@ class Hud extends GameChildProcess {
 
 	var completionText : h2d.Text;
 	var debugText : h2d.Text;
+	var playerHud : HSprite;
+	var currentPlayerHudAnim : Null<String>;
 
 	public function new() {
 		super();
@@ -25,12 +27,19 @@ class Hud extends GameChildProcess {
 
 		debugText = new h2d.Text(Assets.fontPixel, root);
 		debugText.filter = new dn.heaps.filter.PixelOutline();
+
+		playerHud = new HSprite(Assets.playerHud);
+		root.addChild(playerHud);
+		playerHud.setCenterRatio(0, 0);
+		playerHud.visible = false;
+		currentPlayerHudAnim = null;
 		clearDebug();
 	}
 
 	override function onResize() {
 		super.onResize();
 		root.setScale(Const.UI_SCALE);
+		updatePlayerHudLayout();
 		invalidate();
 	}
 
@@ -103,6 +112,7 @@ class Hud extends GameChildProcess {
 	function render() {
 		if( level==null ) {
 			completionText.visible = false;
+			playerHud.visible = false;
 			return;
 		}
 
@@ -110,6 +120,59 @@ class Hud extends GameChildProcess {
 		completionText.text = "Completed " + formatPercentage(level.totalCompletedPercentage) + " / " + formatPercentage(level.requiredPercentage);
 		completionText.x = 4;
 		completionText.y = Std.int(stageHei/Const.UI_SCALE - completionText.textHeight - 4);
+	}
+
+	function getFirstAlivePlayer() {
+		for( e in Entity.ALL )
+			if( !e.destroyed && e.is(bobshot.BobshotPlayer) ) {
+				var player = e.as(bobshot.BobshotPlayer);
+				if( player.isAlive() )
+					return player;
+			}
+
+		return null;
+	}
+
+	function updatePlayerHudLayout() {
+		var uiWidth = stageWid/Const.UI_SCALE;
+		var margin = uiWidth * 0.02;
+		playerHud.x = margin;
+		playerHud.y = margin;
+
+		var frameWidth = playerHud.tile==null ? 0.0 : playerHud.tile.width;
+		if( frameWidth>0 ) {
+			var targetWidth = uiWidth * 0.10;
+			var s = targetWidth / frameWidth;
+			playerHud.setScale(s);
+		}
+	}
+
+	function updatePlayerHudAnim() {
+		var player = getFirstAlivePlayer();
+		if( player==null ) {
+			playerHud.visible = false;
+			currentPlayerHudAnim = null;
+			return;
+		}
+
+		var nextAnim = player.getCurrentAnimTag();
+		if( nextAnim==null || !Assets.playerHud.exists(nextAnim) ) {
+			playerHud.visible = false;
+			currentPlayerHudAnim = null;
+			return;
+		}
+
+		playerHud.visible = true;
+		if( currentPlayerHudAnim==nextAnim )
+			return;
+
+		currentPlayerHudAnim = nextAnim;
+		playerHud.set(Assets.playerHud, nextAnim, 0);
+		updatePlayerHudLayout();
+		if( playerHud.group!=null && playerHud.group.anim!=null && playerHud.group.anim.length>0 )
+			playerHud.anim.playAndLoop(nextAnim);
+		else if( playerHud.animAllocated )
+			playerHud.anim.stopWithoutStateAnims(nextAnim, 0);
 	}
 
 	public function onLevelStart() {
@@ -128,5 +191,7 @@ class Hud extends GameChildProcess {
 			invalidated = false;
 			render();
 		}
+
+		updatePlayerHudAnim();
 	}
 }
