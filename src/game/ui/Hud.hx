@@ -6,7 +6,6 @@ class Hud extends GameChildProcess {
 	var notifications : Array<h2d.Flow> = [];
 	var notifTw : dn.Tweenie;
 
-	var completionText : h2d.Text;
 	var debugText : h2d.Text;
 	var playerHud : HSprite;
 	var currentPlayerHudAnim : Null<String>;
@@ -22,8 +21,6 @@ class Hud extends GameChildProcess {
 		flow = new h2d.Flow(root);
 		notifications = [];
 
-		completionText = new h2d.Text(Assets.fontPixel, root);
-		completionText.filter = new dn.heaps.filter.PixelOutline();
 
 		debugText = new h2d.Text(Assets.fontPixel, root);
 		debugText.filter = new dn.heaps.filter.PixelOutline();
@@ -105,21 +102,11 @@ class Hud extends GameChildProcess {
 
 	public inline function invalidate() invalidated = true;
 
-	function formatPercentage(value:Float) {
-		return M.pretty(value, 1) + "%";
-	}
-
 	function render() {
 		if( level==null ) {
-			completionText.visible = false;
 			playerHud.visible = false;
 			return;
 		}
-
-		completionText.visible = true;
-		completionText.text = "Completed " + formatPercentage(level.totalCompletedPercentage) + " / " + formatPercentage(level.requiredPercentage);
-		completionText.x = 4;
-		completionText.y = Std.int(stageHei/Const.UI_SCALE - completionText.textHeight - 4);
 	}
 
 	function getFirstAlivePlayer() {

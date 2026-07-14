@@ -79,6 +79,29 @@ class Game extends AppChildProcess {
 
 	function getOrderedWorldLevels() : Array<World.World_Level> {
 		var orderedLevels : Array<World.World_Level> = [];
+		var ldtkRes = hxd.Res.load(Assets.worldData.projectFilePath.substr(4));
+		var rawProject:Dynamic = haxe.Json.parse(ldtkRes.entry.getText());
+		var worlds:Array<Dynamic> = cast Reflect.field(rawProject, "worlds");
+		if( worlds!=null )
+			for( world in worlds ) {
+				if( Reflect.field(world, "identifier")!="BobshotWorld" )
+					continue;
+				var levels:Array<Dynamic> = cast Reflect.field(world, "levels");
+				if( levels==null )
+					break;
+				for( rawLevel in levels ) {
+					var rawUid:Dynamic = Reflect.field(rawLevel, "uid");
+					if( rawUid==null )
+						continue;
+					var l = Assets.worldData.all_worlds.BobshotWorld.getLevel(cast rawUid);
+					if( l!=null )
+						orderedLevels.push(l);
+				}
+				break;
+			}
+		if( orderedLevels.length>0 )
+			return orderedLevels;
+
 		var allLevels:Dynamic = Assets.worldData.all_worlds.BobshotWorld.all_levels;
 		for( levelId in Reflect.fields(allLevels) ) {
 			var l:World.World_Level = cast Reflect.field(allLevels, levelId);

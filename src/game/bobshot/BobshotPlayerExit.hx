@@ -1,7 +1,6 @@
 ﻿package bobshot;
 
 class BobshotPlayerExit extends Entity {
-	static inline var TAG_STEP = 10;
 	static inline var MAX_TAG_VALUE = 100;
 
 	var currentTag : Null<String>;
@@ -21,9 +20,7 @@ class BobshotPlayerExit extends Entity {
 	}
 
 	function getRoundedTag() {
-		var frameValue = (MAX_TAG_VALUE - level.requiredPercentage) + level.totalCompletedPercentage;
-		var steppedValue = Std.int(Math.floor(frameValue / TAG_STEP)) * TAG_STEP;
-		return M.iclamp(steppedValue, 0, MAX_TAG_VALUE);
+		return MAX_TAG_VALUE;
 	}
 
 	function updateTag() {

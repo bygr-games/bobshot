@@ -999,10 +999,8 @@ class BobshotPlayer extends Entity {
 
 				if( !cd.hasSetS("levelExit", 0.2) ) {
 					clearFlyingMode();
-					var shouldStartNextLevel = level.registerCompletedPercentage(getCompletionPercentage());
 					destroy();
-					if( shouldStartNextLevel )
-						app.delayer.nextFrame( ()->game.startNextLevelWrap() );
+					app.delayer.nextFrame( ()->game.startNextLevelWrap() );
 				}
 				return;
 			}
