@@ -1,6 +1,7 @@
 package bobshot;
 
 import bobshot.enemies.BobshotEnemy;
+import bobshot.BobshotPlayer;
 
 class FallingObject extends Entity {
 	static inline var GRAVITY = 0.05;
@@ -56,6 +57,17 @@ class FallingObject extends Entity {
 		return false;
 	}
 
+	function crushCollidingPlayers() {
+		for( e in Entity.ALL ) {
+			if( e.destroyed || !e.is(BobshotPlayer) )
+				continue;
+
+			var player = e.as(BobshotPlayer);
+			if( Lib.rectangleOverlaps(left, top, wid, hei, player.left, player.top, player.wid, player.hei) )
+				player.kill(this);
+		}
+	}
+
 	function crushCollidingNonHazardEnemies() {
 		for( e in Entity.ALL ) {
 			if( e.destroyed || !e.is(BobshotEnemy) )
@@ -92,7 +104,9 @@ class FallingObject extends Entity {
 		
 		super.fixedUpdate();
 
-		if( !destroyed && isFalling )
+		if( !destroyed && isFalling ) {
+			crushCollidingPlayers();
 			crushCollidingNonHazardEnemies();
+		}
 	}
 }
