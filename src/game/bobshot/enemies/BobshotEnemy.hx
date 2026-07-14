@@ -30,6 +30,7 @@ private typedef EnemyTypeDef = {
 **/
 class BobshotEnemy extends Entity {
 	public static inline var COLLISION_EPSILON = 0.001;
+	static inline var BIG_ENEMY_BOUNCE_SPEED = 0.25;
 	static inline var DEFAULT_ENEMY_TYPE = "saw";
 	static final ENEMY_DEFS = initEnemyDefs();
 
@@ -241,6 +242,42 @@ class BobshotEnemy extends Entity {
 
 	public inline function hasLeftLevelHorizontally() {
 		return right<=0 || left>=level.pxWid;
+	}
+
+	function resolveBigEnemyOverlap() {
+		if( enemyType!="big" )
+			return;
+
+		for( e in Entity.ALL )
+			if( !e.destroyed && e!=this && e.is(BobshotEnemy) ) {
+				var other = e.as(BobshotEnemy);
+				if( other.enemyType!="big" || !other.isAlive() || uid>=other.uid )
+					continue;
+
+				var overlapX = M.fmin(right - other.left, other.right - left);
+				var overlapY = M.fmin(bottom - other.top, other.bottom - top);
+				if( overlapX<=COLLISION_EPSILON || overlapY<=COLLISION_EPSILON )
+					continue;
+
+				var separation = overlapX*0.5 + COLLISION_EPSILON;
+				if( centerX <= other.centerX ) {
+					setPosPixel(attachX - separation, attachY);
+					other.setPosPixel(other.attachX + separation, other.attachY);
+				}
+				else {
+					setPosPixel(attachX + separation, attachY);
+					other.setPosPixel(other.attachX - separation, other.attachY);
+				}
+
+				vBase.clearX();
+				vBump.clearX();
+				other.vBase.clearX();
+				other.vBump.clearX();
+
+				var bounceDir = centerX <= other.centerX ? -1 : 1;
+				vBump.addX(bounceDir * BIG_ENEMY_BOUNCE_SPEED);
+				other.vBump.addX(-bounceDir * BIG_ENEMY_BOUNCE_SPEED);
+			}
 	}
 
 	/**
@@ -482,6 +519,10 @@ class BobshotEnemy extends Entity {
 
 		// Apply strategy behavior
 		strategy.update(this);
+		if( destroyed )
+			return;
+
+		resolveBigEnemyOverlap();
 		if( destroyed )
 			return;
 
