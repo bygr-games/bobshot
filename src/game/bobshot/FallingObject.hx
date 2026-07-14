@@ -68,15 +68,12 @@ class FallingObject extends Entity {
 		}
 	}
 
-	function crushCollidingNonHazardEnemies() {
+	function crushCollidingEnemies() {
 		for( e in Entity.ALL ) {
 			if( e.destroyed || !e.is(BobshotEnemy) )
 				continue;
 
 			var enemy = e.as(BobshotEnemy);
-			if( enemy.isHazard() )
-				continue;
-
 			if( Lib.rectangleOverlaps(left, top, wid, hei, enemy.left, enemy.top, enemy.wid, enemy.hei) )
 				enemy.kill(this);
 		}
@@ -106,7 +103,7 @@ class FallingObject extends Entity {
 
 		if( !destroyed && isFalling ) {
 			crushCollidingPlayers();
-			crushCollidingNonHazardEnemies();
+			crushCollidingEnemies();
 		}
 	}
 }
