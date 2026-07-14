@@ -493,50 +493,6 @@ class BobshotPlayer extends Entity {
 		return false;
 	}
 
-	static function loadLevelStarts() {
-		if( levelStartByUid!=null )
-			return;
-
-		levelStartByUid = new Map();
-		var raw:Dynamic = haxe.Json.parse(hxd.Res.levels.bobshotWorld.entry.getText());
-		var worlds:Array<Dynamic> = cast Reflect.field(raw, "worlds");
-		if( worlds==null )
-			return;
-
-		for( world in worlds ) {
-			var levels:Array<Dynamic> = cast Reflect.field(world, "levels");
-			if( levels==null )
-				continue;
-
-			for( l in levels ) {
-				var levelUid:Int = cast Reflect.field(l, "uid");
-				var layers:Array<Dynamic> = cast Reflect.field(l, "layerInstances");
-				if( layers==null )
-					continue;
-
-				for( layer in layers ) {
-					if( Reflect.field(layer, "__identifier")!="Entities" )
-						continue;
-
-					var entities:Array<Dynamic> = cast Reflect.field(layer, "entityInstances");
-					if( entities==null )
-						continue;
-
-					for( entity in entities ) {
-						if( Reflect.field(entity, "__identifier")=="PlayerStart" ) {
-							var grid:Array<Int> = cast Reflect.field(entity, "__grid");
-							if( grid!=null && grid.length>=2 )
-								levelStartByUid.set(levelUid, { cx:grid[0], cy:grid[1] });
-							break;
-						}
-					}
-
-					break;
-				}
-			}
-		}
-	}
-
 	function getCurrentLevelStart() {
 		var starts:Array<Dynamic> = cast Reflect.field(level.data.l_Entities, "all_PlayerStart");
 		if( starts!=null && starts.length>0 ) {
