@@ -537,9 +537,16 @@ class BobshotPlayer extends Entity {
 		}
 	}
 
-	inline function getCurrentLevelStart() {
-		loadLevelStarts();
-		return levelStartByUid.get(level.data.uid);
+	function getCurrentLevelStart() {
+		var starts:Array<Dynamic> = cast Reflect.field(level.data.l_Entities, "all_PlayerStart");
+		if( starts!=null && starts.length>0 ) {
+			var start = starts[0];
+			var cx:Dynamic = Reflect.field(start, "cx");
+			var cy:Dynamic = Reflect.field(start, "cy");
+			if( cx!=null && cy!=null )
+				return { cx:cast cx, cy:cast cy };
+		}
+		return null;
 	}
 
 	static function resolveSurvivorsMidpoint(out:LPoint) {
