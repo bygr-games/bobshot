@@ -27,6 +27,7 @@ class Assets {
 	public static var enemyBig : SpriteLib;
 	public static var potionFlying : SpriteLib;
 	public static var playerExit : SpriteLib;
+	public static var conditionalExit : SpriteLib;
 	public static var recombobulator : SpriteLib;
 
 	/** LDtk world data **/
@@ -58,6 +59,7 @@ class Assets {
 		enemyBig = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_big.toAseprite());
 		potionFlying = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.potion_flying.toAseprite());
 		playerExit = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.playerExit.toAseprite());
+		conditionalExit = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.conditional_exit.toAseprite());
 		recombobulator = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.recombobulator.toAseprite());
 
 		// Hot-reloading of CastleDB
@@ -126,6 +128,7 @@ class Assets {
 		enemyBig.tmod = tmod;
 		potionFlying.tmod = tmod;
 		playerExit.tmod = tmod;
+		conditionalExit.tmod = tmod;
 		recombobulator.tmod = tmod;
 		// <-- add other atlas TMOD updates here
 	}

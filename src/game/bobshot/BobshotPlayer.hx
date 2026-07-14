@@ -125,11 +125,23 @@ class BobshotPlayer extends Entity {
 		return !other.destroyed && other.isDeactivated();
 	}
 
+	inline function isSolidConditionalExit(other:BobshotConditionalExit) {
+		return !other.destroyed && other.blocksPlayers();
+	}
+
 	inline function overlapsRecombobulatorX(other:BobshotRecombobulator) {
 		return right > other.left + COLLISION_EPSILON && left < other.right - COLLISION_EPSILON;
 	}
 
 	inline function overlapsRecombobulatorY(other:BobshotRecombobulator) {
+		return bottom > other.top + COLLISION_EPSILON && top < other.bottom - COLLISION_EPSILON;
+	}
+
+	inline function overlapsConditionalExitX(other:BobshotConditionalExit) {
+		return right > other.left + COLLISION_EPSILON && left < other.right - COLLISION_EPSILON;
+	}
+
+	inline function overlapsConditionalExitY(other:BobshotConditionalExit) {
 		return bottom > other.top + COLLISION_EPSILON && top < other.bottom - COLLISION_EPSILON;
 	}
 
@@ -210,6 +222,18 @@ class BobshotPlayer extends Entity {
 			if( !e.destroyed && e.is(BobshotRecombobulator) ) {
 				var other = e.as(BobshotRecombobulator);
 				if( !isSolidRecombobulator(other) )
+					continue;
+
+				var overlapsX = targetRight > other.left + COLLISION_EPSILON && targetLeft < other.right - COLLISION_EPSILON;
+				var overlapsY = targetBottom > other.top + COLLISION_EPSILON && targetTop < other.bottom - COLLISION_EPSILON;
+				if( overlapsX && overlapsY )
+					return false;
+			}
+
+		for( e in Entity.ALL )
+			if( !e.destroyed && e.is(BobshotConditionalExit) ) {
+				var other = e.as(BobshotConditionalExit);
+				if( !isSolidConditionalExit(other) )
 					continue;
 
 				var overlapsX = targetRight > other.left + COLLISION_EPSILON && targetLeft < other.right - COLLISION_EPSILON;
@@ -319,6 +343,17 @@ class BobshotPlayer extends Entity {
 				}
 			}
 
+		for( e in Entity.ALL )
+			if( !e.destroyed && e.is(BobshotConditionalExit) ) {
+				var other = e.as(BobshotConditionalExit);
+				if( !isSolidConditionalExit(other) || !overlapsConditionalExitY(other) )
+					continue;
+
+				if( right > other.left && left < other.left && centerX <= other.centerX )
+					if( best==null || other.left<best )
+						best = other.left;
+			}
+
 		return best;
 	}
 
@@ -366,6 +401,17 @@ class BobshotPlayer extends Entity {
 					if( best==null || other.right>best )
 						best = other.right;
 				}
+			}
+
+		for( e in Entity.ALL )
+			if( !e.destroyed && e.is(BobshotConditionalExit) ) {
+				var other = e.as(BobshotConditionalExit);
+				if( !isSolidConditionalExit(other) || !overlapsConditionalExitY(other) )
+					continue;
+
+				if( left < other.right && right > other.right && centerX >= other.centerX )
+					if( best==null || other.right>best )
+						best = other.right;
 			}
 
 		return best;
@@ -416,6 +462,17 @@ class BobshotPlayer extends Entity {
 						best = other.top;
 			}
 
+		for( e in Entity.ALL )
+			if( !e.destroyed && e.is(BobshotConditionalExit) ) {
+				var other = e.as(BobshotConditionalExit);
+				if( !isSolidConditionalExit(other) || !overlapsConditionalExitX(other) )
+					continue;
+
+				if( bottom > other.top && top < other.top && centerY <= other.centerY )
+					if( best==null || other.top<best )
+						best = other.top;
+			}
+
 		return best;
 	}
 
@@ -455,6 +512,17 @@ class BobshotPlayer extends Entity {
 			if( !e.destroyed && e.is(BobshotRecombobulator) ) {
 				var other = e.as(BobshotRecombobulator);
 				if( !isSolidRecombobulator(other) || !overlapsRecombobulatorX(other) )
+					continue;
+
+				if( top < other.bottom && bottom > other.bottom && centerY >= other.centerY )
+					if( best==null || other.bottom>best )
+						best = other.bottom;
+			}
+
+		for( e in Entity.ALL )
+			if( !e.destroyed && e.is(BobshotConditionalExit) ) {
+				var other = e.as(BobshotConditionalExit);
+				if( !isSolidConditionalExit(other) || !overlapsConditionalExitX(other) )
 					continue;
 
 				if( top < other.bottom && bottom > other.bottom && centerY >= other.centerY )

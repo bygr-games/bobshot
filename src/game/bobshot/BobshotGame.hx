@@ -78,6 +78,16 @@ class BobshotGame extends Game {
 					}
 		}
 
+		var conditionalExitSpawns:Array<Dynamic> = cast Reflect.field(level.data.l_Entities, "all_ConditionalExit");
+		if( conditionalExitSpawns != null ) {
+			for( conditionalExitSpawn in conditionalExitSpawns ) {
+				var cx:Int = cast Reflect.field(conditionalExitSpawn, "cx");
+				var cy:Int = cast Reflect.field(conditionalExitSpawn, "cy");
+				var pivot = readPivot(conditionalExitSpawn, 0.5, 1.0);
+				new BobshotConditionalExit(cx, cy, pivot.x, pivot.y);
+			}
+		}
+
 		var recombobulatorSpawns:Array<Dynamic> = cast Reflect.field(level.data.l_Entities, "all_Recombobulator");
 		if( recombobulatorSpawns != null ) {
 			for( recombobulatorSpawn in recombobulatorSpawns ) {
