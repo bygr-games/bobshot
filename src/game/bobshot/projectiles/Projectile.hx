@@ -128,7 +128,7 @@ class Projectile extends Entity {
 		if( !level.isValid(testCx, testCy) )
 			return strategy.collidesWithLevelBounds();
 
-		return level.hasCollision(testCx, testCy);
+		return level.hasWallCollision(testCx, testCy);
 	}
 
 	inline function hasLeftLevel():Bool {
