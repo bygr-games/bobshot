@@ -9,7 +9,10 @@ class Hud extends GameChildProcess {
 	var debugText : h2d.Text;
 	var playerHud : HSprite;
 	var currentPlayerHudAnim : Null<String>;
-	var pointsText : h2d.Text;
+	var pointsLabel : h2d.Text;
+	var pointsRoot : h2d.Object;
+	var pointsDigits : Array<HSprite>;
+	var displayedPoints : Null<Int>;
 
 	public function new() {
 		super();
@@ -32,10 +35,14 @@ class Hud extends GameChildProcess {
 		playerHud.visible = false;
 		currentPlayerHudAnim = null;
 
-		pointsText = new h2d.Text(Assets.fontPixel, root);
-		pointsText.filter = new dn.heaps.filter.PixelOutline();
-		pointsText.textColor = 0xffffff;
-		pointsText.text = "POINTS: 0";
+		pointsLabel = new h2d.Text(Assets.fontPixel, root);
+		pointsLabel.filter = new dn.heaps.filter.PixelOutline();
+		pointsLabel.textColor = 0xffffff;
+		pointsLabel.text = "POINTS";
+
+		pointsRoot = new h2d.Object(root);
+		pointsDigits = [];
+		displayedPoints = null;
 
 		clearDebug();
 	}
@@ -140,8 +147,10 @@ class Hud extends GameChildProcess {
 			playerHud.setScale(s);
 		}
 
-		pointsText.x = margin;
-		pointsText.y = margin + uiWidth * 0.12;
+		pointsLabel.x = margin;
+		pointsLabel.y = margin + uiWidth * 0.12;
+		pointsRoot.x = margin;
+		pointsRoot.y = pointsLabel.y + pointsLabel.textHeight + 2;
 	}
 
 	function updatePlayerHudAnim() {
@@ -176,8 +185,51 @@ class Hud extends GameChildProcess {
 		invalidate();
 	}
 
+	function getDigitTag(d:Int) {
+		return Std.string(d);
+	}
+
 	function updatePointsText() {
-		pointsText.text = "POINTS: " + bobshot.enemies.BobshotEnemy.getTotalPoints();
+		var total = bobshot.enemies.BobshotEnemy.getTotalPoints();
+		if( displayedPoints!=null && displayedPoints==total )
+			return;
+		displayedPoints = total;
+
+		pointsRoot.removeChildren();
+		pointsDigits = [];
+
+		var scoreStr = Std.string(total);
+		if( scoreStr.charAt(0)=="-" )
+			scoreStr = scoreStr.substr(1);
+		if( scoreStr.length==0 )
+			scoreStr = "0";
+
+		var x = 0.0;
+		if( total<0 ) {
+			var minus = new h2d.Text(Assets.fontPixel, pointsRoot);
+			minus.filter = new dn.heaps.filter.PixelOutline();
+			minus.textColor = 0xffffff;
+			minus.text = "-";
+			minus.x = x;
+			x += minus.textWidth + 2;
+		}
+
+		for( i in 0...scoreStr.length ) {
+			var digit = Std.parseInt(scoreStr.charAt(i));
+			if( digit==null )
+				digit = 0;
+			var tag = getDigitTag(digit);
+			var spr = new HSprite(Assets.numbers, pointsRoot);
+			spr.setCenterRatio(0, 0);
+			spr.set(Assets.numbers, tag, 0);
+			if( spr.group!=null && spr.group.anim!=null && spr.group.anim.length>0 )
+				spr.anim.playAndLoop(tag);
+			else if( spr.animAllocated )
+				spr.anim.stopWithoutStateAnims(tag, 0);
+			spr.x = x;
+			x += spr.tile==null ? 8 : spr.tile.width + 1;
+			pointsDigits.push(spr);
+		}
 	}
 
 	override function preUpdate() {
