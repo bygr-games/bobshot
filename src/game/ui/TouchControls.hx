@@ -42,20 +42,7 @@ class TouchControls {
 	}
 
 	public static function shouldEnable() {
-		#if js
-		var nav = js.Browser.navigator;
-		if( nav!=null ) {
-			var maxTouchPoints:Dynamic = Reflect.field(nav, "maxTouchPoints");
-			if( maxTouchPoints!=null && maxTouchPoints>0 )
-				return true;
-			var userAgent = nav.userAgent==null ? "" : nav.userAgent;
-			if( ~/Android|iPhone|iPad|iPod|Mobile|Touch/i.match(userAgent) )
-				return true;
-		}
-		return false;
-		#else
-		return false;
-		#end
+		return true;
 	}
 
 	public static function beginFrame(locked:Bool) {

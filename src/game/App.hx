@@ -224,10 +224,8 @@ class App extends dn.Process {
 
 
 	function initTouchControls() {
-		#if js
 		if( ui.TouchControls.shouldEnable() )
 			touchControls = new ui.TouchControls(root);
-		#end
 	}
 
 	/** Init game controller and default key bindings **/
@@ -336,14 +334,12 @@ class App extends dn.Process {
 				Console.ME.runCommand("/flags");
 		}
 
-		#if js
 		if( touchControls!=null ) {
-			var uiWid = stageWid / Const.SCALE;
-			var uiHei = stageHei / Const.SCALE;
+			var uiWid = stageWid;
+			var uiHei = stageHei;
 			touchControls.updateLayout(uiWid, uiHei);
 			ui.TouchControls.beginFrame(destroyed || anyInputHasFocus());
 		}
-		#end
 
 		if( ui.Console.ME.isActive() )
 			cd.setF("consoleRecentlyActive",2);
