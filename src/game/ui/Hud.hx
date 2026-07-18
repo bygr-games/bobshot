@@ -9,6 +9,7 @@ class Hud extends GameChildProcess {
 	var debugText : h2d.Text;
 	var playerHud : HSprite;
 	var currentPlayerHudAnim : Null<String>;
+	var pointsText : h2d.Text;
 
 	public function new() {
 		super();
@@ -30,6 +31,12 @@ class Hud extends GameChildProcess {
 		playerHud.setCenterRatio(0, 0);
 		playerHud.visible = false;
 		currentPlayerHudAnim = null;
+
+		pointsText = new h2d.Text(Assets.fontPixel, root);
+		pointsText.filter = new dn.heaps.filter.PixelOutline();
+		pointsText.textColor = 0xffffff;
+		pointsText.text = "POINTS: 0";
+
 		clearDebug();
 	}
 
@@ -132,6 +139,9 @@ class Hud extends GameChildProcess {
 			var s = targetWidth / frameWidth;
 			playerHud.setScale(s);
 		}
+
+		pointsText.x = margin;
+		pointsText.y = margin + uiWidth * 0.12;
 	}
 
 	function updatePlayerHudAnim() {
@@ -166,6 +176,10 @@ class Hud extends GameChildProcess {
 		invalidate();
 	}
 
+	function updatePointsText() {
+		pointsText.text = "POINTS: " + bobshot.enemies.BobshotEnemy.getTotalPoints();
+	}
+
 	override function preUpdate() {
 		super.preUpdate();
 		notifTw.update(tmod);
@@ -180,5 +194,6 @@ class Hud extends GameChildProcess {
 		}
 
 		updatePlayerHudAnim();
+		updatePointsText();
 	}
 }
