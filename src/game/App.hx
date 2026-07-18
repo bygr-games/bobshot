@@ -16,6 +16,7 @@ class App extends dn.Process {
 
 	/** If TRUE, game is paused, and a Contrast filter is applied **/
 	public var screenshotMode(default,null) = false;
+	var touchControls : Null<ui.TouchControls>;
 
 	public var globalMouseX(get,never) : Int; inline function get_globalMouseX() return Std.int( Boot.ME.s2d.mouseX );
 	public var globalMouseY(get,never) : Int; inline function get_globalMouseY() return Std.int( Boot.ME.s2d.mouseY );
@@ -32,6 +33,7 @@ class App extends dn.Process {
 		initEngine();
 		initAssets();
 		initController();
+		initTouchControls();
 
 		// Create console (open with [²] key)
 		new ui.Console(Assets.fontPixelMono, scene); // init debug console
@@ -221,6 +223,11 @@ class App extends dn.Process {
 	}
 
 
+	function initTouchControls() {
+		if( ui.TouchControls.shouldEnable() )
+			touchControls = new ui.TouchControls(root);
+	}
+
 	/** Init game controller and default key bindings **/
 	function initController() {
 		controller = dn.heaps.input.Controller.createFromAbstractEnum(GameAction);
@@ -325,6 +332,13 @@ class App extends dn.Process {
 
 			if( ca.isPressed(OpenConsoleFlags) )
 				Console.ME.runCommand("/flags");
+		}
+
+		if( touchControls!=null ) {
+			var uiWid = stageWid;
+			var uiHei = stageHei;
+			touchControls.updateLayout(uiWid, uiHei);
+			ui.TouchControls.beginFrame(destroyed || anyInputHasFocus());
 		}
 
 		if( ui.Console.ME.isActive() )

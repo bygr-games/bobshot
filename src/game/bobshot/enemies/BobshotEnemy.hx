@@ -15,6 +15,7 @@ private typedef EnemyTypeDef = {
 	var useInBoundsWallCollision : Bool;
 	var despawnAfterLeavingLevel : Bool;
 	var hitsToKill : Int;
+	var points : Int;
 }
 
 /**
@@ -33,6 +34,7 @@ class BobshotEnemy extends Entity {
 	static inline var BIG_ENEMY_BOUNCE_SPEED = 0.25;
 	static inline var DEFAULT_ENEMY_TYPE = "saw";
 	static final ENEMY_DEFS = initEnemyDefs();
+	public static var totalPoints(default, null) = 0;
 
 	var strategy : EnemyStrategy;
 	var enemyType : String;
@@ -62,6 +64,7 @@ class BobshotEnemy extends Entity {
 			useInBoundsWallCollision: false,
 			despawnAfterLeavingLevel: false,
 			hitsToKill: 1,
+			points: 100,
 		});
 
 		defs.set("red", {
@@ -75,6 +78,7 @@ class BobshotEnemy extends Entity {
 			useInBoundsWallCollision: false,
 			despawnAfterLeavingLevel: false,
 			hitsToKill: 1,
+			points: 200,
 		});
 
 		defs.set("shooting", {
@@ -88,6 +92,7 @@ class BobshotEnemy extends Entity {
 			useInBoundsWallCollision: false,
 			despawnAfterLeavingLevel: false,
 			hitsToKill: 1,
+			points: 300,
 		});
 
 		defs.set("scared", {
@@ -101,6 +106,7 @@ class BobshotEnemy extends Entity {
 			useInBoundsWallCollision: true,
 			despawnAfterLeavingLevel: true,
 			hitsToKill: 1,
+			points: 250,
 		});
 
 		defs.set("spike", {
@@ -114,6 +120,7 @@ class BobshotEnemy extends Entity {
 			useInBoundsWallCollision: false,
 			despawnAfterLeavingLevel: false,
 			hitsToKill: 1,
+			points: 150,
 		});
 
 		defs.set("big", {
@@ -127,6 +134,7 @@ class BobshotEnemy extends Entity {
 			useInBoundsWallCollision: false,
 			despawnAfterLeavingLevel: false,
 			hitsToKill: 5,
+			points: 1000,
 		});
 
 		return defs;
@@ -421,6 +429,22 @@ class BobshotEnemy extends Entity {
 		super.onDie();
 	}
 
+	public static inline function resetTotalPoints() {
+		totalPoints = 0;
+	}
+
+	public static inline function addPoints(v:Int) {
+		totalPoints += v;
+	}
+
+	public static inline function getTotalPoints() {
+		return totalPoints;
+	}
+
+	public inline function getPointsValue() {
+		return enemyDef.points;
+	}
+
 	override public function kill(by:Null<Entity>) {
 		if( !isAlive() )
 			return;
@@ -429,6 +453,9 @@ class BobshotEnemy extends Entity {
 			hit(1, by);
 		else
 			super.kill(by);
+
+		if( !isAlive() )
+			addPoints(getPointsValue());
 	}
 
 	override function dispose() {

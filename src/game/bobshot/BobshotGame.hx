@@ -12,6 +12,7 @@ class BobshotGame extends Game {
 
 	public function new() {
 		super();
+		bobshot.enemies.BobshotEnemy.resetTotalPoints();
 		startBackgroundMusic();
 	}
 

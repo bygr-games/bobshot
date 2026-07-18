@@ -705,6 +705,7 @@ class BobshotPlayer extends Entity {
 
 		// Set invulnerability
 		ucd.setS("spawnImmunity", SPAWN_IMMUNITY_S);
+		bobshot.enemies.BobshotEnemy.addPoints(-50);
 
 		// Push back away from damage source
 		var pushDir = from == null ? dir : (centerX < from.centerX ? -1 : 1);
@@ -979,7 +980,16 @@ class BobshotPlayer extends Entity {
 		if( onGround )
 			cd.setS("recentlyOnGround",0.1); // allows "just-in-time" jumps
 
-		if( onGround && ca.isPressed(MoveDown) ) {
+		var touchDownPressed = ui.TouchControls.isPressed(MoveDown);
+		var touchJumpPressed = ui.TouchControls.isPressed(Jump);
+		var touchShootPressed = ui.TouchControls.isPressed(Shoot);
+		var touchLeftDown = ui.TouchControls.isDown(MoveLeft);
+		var touchRightDown = ui.TouchControls.isDown(MoveRight);
+		var touchUpDown = ui.TouchControls.isDown(MoveUp);
+		var touchDownDown = ui.TouchControls.isDown(MoveDown);
+		var touchMoveX = ui.TouchControls.getMoveX();
+
+		if( onGround && (ca.isPressed(MoveDown) || touchDownPressed) ) {
 			var platformRow = getGroundPlatformRow();
 			if( platformRow!=null ) {
 				ignoredPlatformRow = platformRow;
@@ -991,7 +1001,7 @@ class BobshotPlayer extends Entity {
 
 
 		// Jump
-		if( (cd.has("recentlyOnGround") || flyingMode) && ca.isPressed(Jump) ) {
+		if( (cd.has("recentlyOnGround") || flyingMode) && (ca.isPressed(Jump) || touchJumpPressed) ) {
 			vBase.addY(-0.85);
 			setSquashX(0.6);
 			if( !flyingMode )
@@ -1006,9 +1016,9 @@ class BobshotPlayer extends Entity {
 			switchSkin(2);
 
 		// Shoot
-		if( ca.isPressed(Shoot) && !cd.hasSetS("playerShoot", 0.3) ) {
-			var rawAimX = ca.isDown(MoveRight) ? 1 : ca.isDown(MoveLeft) ? -1 : 0;
-			var rawAimY = ca.isDown(MoveDown) ? 1 : ca.isDown(MoveUp) ? -1 : 0;
+		if( (ca.isPressed(Shoot) || touchShootPressed) && !cd.hasSetS("playerShoot", 0.3) ) {
+			var rawAimX = ca.isDown(MoveRight) || touchRightDown ? 1 : ca.isDown(MoveLeft) || touchLeftDown ? -1 : 0;
+			var rawAimY = ca.isDown(MoveDown) || touchDownDown ? 1 : ca.isDown(MoveUp) || touchUpDown ? -1 : 0;
 			var aimX:Float = rawAimX != 0 || rawAimY == 0 ? (rawAimX != 0 ? rawAimX : dir) : 0;
 			var aimY:Float = rawAimY;
 			if( rawAimX != 0 && rawAimY != 0 ) {
@@ -1020,9 +1030,11 @@ class BobshotPlayer extends Entity {
 		}
 
 		// Walk
-		if( !isChargingAction() && ca.getAnalogDist2(MoveLeft,MoveRight)>0 ) {
+		var analogMoveX = ca.getAnalogDist2(MoveLeft,MoveRight)>0 ? ca.getAnalogValue2(MoveLeft,MoveRight) : 0.0;
+		var requestedMoveX = analogMoveX!=0 ? analogMoveX : touchMoveX;
+		if( !isChargingAction() && requestedMoveX!=0 ) {
 			// As mentioned above, we don't touch physics values (eg. `dx`) here. We just store some "requested walk speed", which will be applied to actual physics in fixedUpdate.
-			walkSpeed = ca.getAnalogValue2(MoveLeft,MoveRight); // -1 to 1
+			walkSpeed = requestedMoveX; // -1 to 1
 			dir = walkSpeed>0 ? 1 : -1;
 		}
 	}

@@ -8,6 +8,7 @@ class FallingObject extends Entity {
 
 	var isFalling = false;
 	var sliceType : String;
+	var grantsPlayerCredit = false;
 
 	public function new(cx:Int, cy:Int, sliceType:String, ?pivotX:Null<Float>, ?pivotY:Null<Float>) {
 		super(cx, cy, pivotX, pivotY);
@@ -74,9 +75,16 @@ class FallingObject extends Entity {
 				continue;
 
 			var enemy = e.as(BobshotEnemy);
-			if( Lib.rectangleOverlaps(left, top, wid, hei, enemy.left, enemy.top, enemy.wid, enemy.hei) )
+			if( Lib.rectangleOverlaps(left, top, wid, hei, enemy.left, enemy.top, enemy.wid, enemy.hei) ) {
+				grantsPlayerCredit = true;
 				enemy.kill(this);
+				grantsPlayerCredit = false;
+			}
 		}
+	}
+
+	public inline function grantsPlayerKillCredit() {
+		return grantsPlayerCredit;
 	}
 
 	override function fixedUpdate() {

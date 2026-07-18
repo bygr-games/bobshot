@@ -18,6 +18,7 @@ class Assets {
 	public static var player2 : SpriteLib;
 	public static var player2Flying : SpriteLib;
 	public static var playerHud : SpriteLib;
+	public static var numbers : SpriteLib;
 	/** Enemy atlases **/
 	public static var enemyRed : SpriteLib;
 	public static var enemySaw : SpriteLib;
@@ -51,6 +52,7 @@ class Assets {
 		player2 = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.player2.toAseprite());
 		player2Flying = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.player2_flying.toAseprite());
 		playerHud = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.player_hud.toAseprite());
+		numbers = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.numbers.toAseprite());
 		enemyRed = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_red.toAseprite());
 		enemySaw = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_saw.toAseprite());
 		enemyShooting = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_shooting.toAseprite());
@@ -120,6 +122,7 @@ class Assets {
 		player2.tmod = tmod;
 		player2Flying.tmod = tmod;
 		playerHud.tmod = tmod;
+		numbers.tmod = tmod;
 		enemyRed.tmod = tmod;
 		enemySaw.tmod = tmod;
 		enemyShooting.tmod = tmod;
