@@ -705,6 +705,7 @@ class BobshotPlayer extends Entity {
 
 		// Set invulnerability
 		ucd.setS("spawnImmunity", SPAWN_IMMUNITY_S);
+		bobshot.enemies.BobshotEnemy.addPoints(-50);
 
 		// Push back away from damage source
 		var pushDir = from == null ? dir : (centerX < from.centerX ? -1 : 1);
