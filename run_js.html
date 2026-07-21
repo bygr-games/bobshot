@@ -30,15 +30,14 @@
 
         const shouldBlock = function (event) {
           if (blockedKeys.has(event.key)) return true;
-          if (event.ctrlKey || event.metaKey || event.altKey) return true;
+          if ((event.ctrlKey || event.metaKey || event.altKey) && event.key.length === 1)
+            return true;
           return false;
         };
 
         const stopShortcut = function (event) {
           if (!shouldBlock(event)) return;
           event.preventDefault();
-          event.stopPropagation();
-          event.stopImmediatePropagation();
         };
 
         window.addEventListener("keydown", stopShortcut, true);
