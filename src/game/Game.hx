@@ -77,32 +77,74 @@ class Game extends AppChildProcess {
 		dn.Gc.runNow();
 	}
 
-	function getOrderedWorldLevels() : Array<World.World_Level> {
-		var orderedLevels : Array<World.World_Level> = [];
+	function getRawProjectWorlds() {
 		var ldtkRes = hxd.Res.load(Assets.worldData.projectFilePath.substr(4));
 		var rawProject:Dynamic = haxe.Json.parse(ldtkRes.entry.getText());
 		var worlds:Array<Dynamic> = cast Reflect.field(rawProject, "worlds");
-		if( worlds!=null )
-			for( world in worlds ) {
-				if( Reflect.field(world, "identifier")!="BobshotWorld" )
-					continue;
-				var levels:Array<Dynamic> = cast Reflect.field(world, "levels");
-				if( levels==null )
-					break;
-				for( rawLevel in levels ) {
-					var rawUid:Dynamic = Reflect.field(rawLevel, "uid");
-					if( rawUid==null )
-						continue;
-					var l = Assets.worldData.all_worlds.BobshotWorld.getLevel(cast rawUid);
-					if( l!=null )
-						orderedLevels.push(l);
-				}
-				break;
+		return worlds==null ? [] : worlds;
+	}
+
+	function getWorldRef(worldIdentifier:String) {
+		return Reflect.field(Assets.worldData.all_worlds, worldIdentifier);
+	}
+
+	function getWorldIdentifierByLevelUid(levelUid:Int) {
+		for( world in getRawProjectWorlds() ) {
+			var levels:Array<Dynamic> = cast Reflect.field(world, "levels");
+			if( levels==null )
+				continue;
+			for( rawLevel in levels ) {
+				var rawUid:Dynamic = Reflect.field(rawLevel, "uid");
+				if( rawUid!=null && cast rawUid==levelUid )
+					return cast Reflect.field(world, "identifier");
 			}
+		}
+		return null;
+	}
+
+	function getLevelFromWorldByUid(worldRef:Dynamic, levelUid:Int) : Null<World.World_Level> {
+		if( worldRef==null )
+			return null;
+
+		var allLevels:Dynamic = Reflect.field(worldRef, "all_levels");
+		if( allLevels==null )
+			return null;
+
+		for( levelId in Reflect.fields(allLevels) ) {
+			var l:World.World_Level = cast Reflect.field(allLevels, levelId);
+			if( l!=null && l.uid==levelUid )
+				return l;
+		}
+
+		return null;
+	}
+
+	function getOrderedWorldLevels(?worldIdentifier="BobshotWorld") : Array<World.World_Level> {
+		var orderedLevels : Array<World.World_Level> = [];
+		var worldRef:Dynamic = getWorldRef(worldIdentifier);
+		if( worldRef==null )
+			return orderedLevels;
+
+		for( world in getRawProjectWorlds() ) {
+			if( Reflect.field(world, "identifier")!=worldIdentifier )
+				continue;
+			var levels:Array<Dynamic> = cast Reflect.field(world, "levels");
+			if( levels==null )
+				break;
+			for( rawLevel in levels ) {
+				var rawUid:Dynamic = Reflect.field(rawLevel, "uid");
+				if( rawUid==null )
+					continue;
+				var l = getLevelFromWorldByUid(worldRef, cast rawUid);
+				if( l!=null )
+					orderedLevels.push(l);
+			}
+			break;
+		}
 		if( orderedLevels.length>0 )
 			return orderedLevels;
 
-		var allLevels:Dynamic = Assets.worldData.all_worlds.BobshotWorld.all_levels;
+		var allLevels:Dynamic = Reflect.field(worldRef, "all_levels");
 		for( levelId in Reflect.fields(allLevels) ) {
 			var l:World.World_Level = cast Reflect.field(allLevels, levelId);
 			if( l!=null )
@@ -116,7 +158,8 @@ class Game extends AppChildProcess {
 		if( level==null )
 			return;
 
-		var orderedLevels = getOrderedWorldLevels();
+		var worldIdentifier = getWorldIdentifierByLevelUid(level.data.uid);
+		var orderedLevels = getOrderedWorldLevels(worldIdentifier==null ? "BobshotWorld" : worldIdentifier);
 		if( orderedLevels.length==0 )
 			return;
 
@@ -135,7 +178,20 @@ class Game extends AppChildProcess {
 		if( level==null )
 			return;
 
-		startLevel(Assets.worldData.all_worlds.BobshotWorld.getLevel(level.data.uid));
+		var worldIdentifier = getWorldIdentifierByLevelUid(level.data.uid);
+		var worldRef:Dynamic = getWorldRef(worldIdentifier==null ? "BobshotWorld" : worldIdentifier);
+		if( worldRef==null )
+			return;
+		var levelData = getLevelFromWorldByUid(worldRef, level.data.uid);
+		if( levelData!=null )
+			startLevel(levelData);
+	}
+
+	public function startLobbyWorld() {
+		var orderedLevels = getOrderedWorldLevels("LobbyWorld");
+		if( orderedLevels.length==0 )
+			return;
+		startLevel(orderedLevels[0]);
 	}
 
 
@@ -151,8 +207,13 @@ class Game extends AppChildProcess {
 	@:allow(assets.Assets)
 	function onLdtkReload() {
 		hud.notify("LDtk reloaded");
-		if( level!=null )
-			startLevel( Assets.worldData.all_worlds.BobshotWorld.getLevel(level.data.uid) );
+		if( level!=null ) {
+			var worldIdentifier = getWorldIdentifierByLevelUid(level.data.uid);
+			var worldRef:Dynamic = getWorldRef(worldIdentifier==null ? "BobshotWorld" : worldIdentifier);
+			var levelData = getLevelFromWorldByUid(worldRef, level.data.uid);
+			if( levelData!=null )
+				startLevel(levelData);
+		}
 	}
 
 	/** Window/app resize event **/

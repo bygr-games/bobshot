@@ -1081,7 +1081,7 @@ class BobshotPlayer extends Entity {
 					if( !Lib.rectangleOverlaps(left, top, wid, hei, exitDoor.left, exitDoor.top, exitDoor.wid, exitDoor.hei) )
 						continue;
 
-					game.restartCurrentLevel();
+					game.startLobbyWorld();
 					return;
 				}
 
