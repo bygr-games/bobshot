@@ -65,12 +65,12 @@ class Console extends h2d.Console {
 			// Garbage collector
 			this.addCommand("gc", [{ name:"state", t:AInt, opt:true }], (?state:Int)->{
 				if( !dn.Gc.isSupported() )
-					log("GC is not supported on this platform", Red);
+					log("GC is not supported on this platform", 0xff6666);
 				else {
 					if( state!=null )
 						dn.Gc.setState(state!=0);
 					dn.Gc.runNow();
-					log("GC forced (current state: "+(dn.Gc.isActive() ? "active" : "inactive" )+")", dn.Gc.isActive()?Green:Yellow);
+					log("GC forced (current state: "+(dn.Gc.isActive() ? "active" : "inactive" )+")", dn.Gc.isActive()?0x80ff00:0xffcc00);
 				}
 			});
 

@@ -102,6 +102,16 @@ class BobshotGame extends Game {
 				new BobshotRecombobulator(cx, cy, requiredPercentage, pivot.x, pivot.y);
 			}
 		}
+
+		var exitDoorSpawns:Array<Dynamic> = cast Reflect.field(level.data.l_Entities, "all_ExitDoor");
+		if( exitDoorSpawns != null ) {
+			for( exitDoorSpawn in exitDoorSpawns ) {
+				var cx:Int = cast Reflect.field(exitDoorSpawn, "cx");
+				var cy:Int = cast Reflect.field(exitDoorSpawn, "cy");
+				var pivot = readPivot(exitDoorSpawn, 0.5, 1.0);
+				new BobshotExitDoor(cx, cy, pivot.x, pivot.y);
+			}
+		}
 		
 		// Spawn player
 		new BobshotPlayer();
