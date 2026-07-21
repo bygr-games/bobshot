@@ -45,7 +45,7 @@ class Game extends AppChildProcess {
 		if( orderedLevels.length>0 )
 			startLevel(orderedLevels[0]);
 		else
-			startLevel(Assets.worldData.all_worlds.BobshotWorld.all_levels.Level_0);
+			startLevel(Assets.worldData.all_worlds.TutorialWorld.all_levels.Level_0);
 	}
 
 
@@ -119,7 +119,7 @@ class Game extends AppChildProcess {
 		return null;
 	}
 
-	function getOrderedWorldLevels(?worldIdentifier="BobshotWorld") : Array<World.World_Level> {
+	function getOrderedWorldLevels(?worldIdentifier="TutorialWorld") : Array<World.World_Level> {
 		var orderedLevels : Array<World.World_Level> = [];
 		var worldRef:Dynamic = getWorldRef(worldIdentifier);
 		if( worldRef==null )
@@ -159,7 +159,7 @@ class Game extends AppChildProcess {
 			return;
 
 		var worldIdentifier = getWorldIdentifierByLevelUid(level.data.uid);
-		var orderedLevels = getOrderedWorldLevels(worldIdentifier==null ? "BobshotWorld" : worldIdentifier);
+		var orderedLevels = getOrderedWorldLevels(worldIdentifier==null ? "TutorialWorld" : worldIdentifier);
 		if( orderedLevels.length==0 )
 			return;
 
@@ -179,7 +179,7 @@ class Game extends AppChildProcess {
 			return;
 
 		var worldIdentifier = getWorldIdentifierByLevelUid(level.data.uid);
-		var worldRef:Dynamic = getWorldRef(worldIdentifier==null ? "BobshotWorld" : worldIdentifier);
+		var worldRef:Dynamic = getWorldRef(worldIdentifier==null ? "TutorialWorld" : worldIdentifier);
 		if( worldRef==null )
 			return;
 		var levelData = getLevelFromWorldByUid(worldRef, level.data.uid);
@@ -187,11 +187,18 @@ class Game extends AppChildProcess {
 			startLevel(levelData);
 	}
 
-	public function startLobbyWorld() {
-		var orderedLevels = getOrderedWorldLevels("LobbyWorld");
+	public function startWorldByIdentifier(worldIdentifier:String) {
+		if( worldIdentifier==null || worldIdentifier=="" )
+			return;
+
+		var orderedLevels = getOrderedWorldLevels(worldIdentifier);
 		if( orderedLevels.length==0 )
 			return;
 		startLevel(orderedLevels[0]);
+	}
+
+	public function startLobbyWorld() {
+		startWorldByIdentifier("LobbyWorld");
 	}
 
 
@@ -209,7 +216,7 @@ class Game extends AppChildProcess {
 		hud.notify("LDtk reloaded");
 		if( level!=null ) {
 			var worldIdentifier = getWorldIdentifierByLevelUid(level.data.uid);
-			var worldRef:Dynamic = getWorldRef(worldIdentifier==null ? "BobshotWorld" : worldIdentifier);
+			var worldRef:Dynamic = getWorldRef(worldIdentifier==null ? "TutorialWorld" : worldIdentifier);
 			var levelData = getLevelFromWorldByUid(worldRef, level.data.uid);
 			if( levelData!=null )
 				startLevel(levelData);

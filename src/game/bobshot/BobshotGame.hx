@@ -112,6 +112,20 @@ class BobshotGame extends Game {
 				new BobshotExitDoor(cx, cy, pivot.x, pivot.y);
 			}
 		}
+
+		var worldEntrySpawns:Array<Dynamic> = cast Reflect.field(level.data.l_Entities, "all_WorldEntry");
+		if( worldEntrySpawns != null ) {
+			for( worldEntrySpawn in worldEntrySpawns ) {
+				var cx:Int = cast Reflect.field(worldEntrySpawn, "cx");
+				var cy:Int = cast Reflect.field(worldEntrySpawn, "cy");
+				var pivot = readPivot(worldEntrySpawn, 0.5, 1.0);
+				var rawWorldName:Dynamic = Reflect.field(worldEntrySpawn, "f_worldName");
+				if( rawWorldName==null )
+					rawWorldName = Reflect.field(worldEntrySpawn, "worldName");
+				var worldName = rawWorldName==null ? "" : cast rawWorldName;
+				new WorldEntry(cx, cy, worldName, pivot.x, pivot.y);
+			}
+		}
 		
 		// Spawn player
 		new BobshotPlayer();

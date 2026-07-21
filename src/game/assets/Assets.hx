@@ -31,6 +31,7 @@ class Assets {
 	public static var conditionalExit : SpriteLib;
 	public static var exitDoor : SpriteLib;
 	public static var recombobulator : SpriteLib;
+	public static var worldEntry : SpriteLib;
 
 	/** LDtk world data **/
 	public static var worldData : World;
@@ -65,6 +66,7 @@ class Assets {
 		conditionalExit = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.conditional_exit.toAseprite());
 		exitDoor = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.exit_door.toAseprite());
 		recombobulator = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.recombobulator.toAseprite());
+		worldEntry = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.world_entry.toAseprite());
 
 		// Hot-reloading of CastleDB
 		#if debug
@@ -136,6 +138,7 @@ class Assets {
 		conditionalExit.tmod = tmod;
 		exitDoor.tmod = tmod;
 		recombobulator.tmod = tmod;
+		worldEntry.tmod = tmod;
 		// <-- add other atlas TMOD updates here
 	}
 

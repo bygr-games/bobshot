@@ -1076,6 +1076,19 @@ class BobshotPlayer extends Entity {
 
 		if( triggerExitDoorRestart )
 			for( e in Entity.ALL )
+				if( !e.destroyed && e.is(bobshot.WorldEntry) ) {
+					var worldEntry = e.as(bobshot.WorldEntry);
+					if( !Lib.rectangleOverlaps(left, top, wid, hei, worldEntry.left, worldEntry.top, worldEntry.wid, worldEntry.hei) )
+						continue;
+					if( worldEntry.worldName==null || worldEntry.worldName=="" )
+						continue;
+
+					game.startWorldByIdentifier(worldEntry.worldName);
+					return;
+				}
+
+		if( triggerExitDoorRestart )
+			for( e in Entity.ALL )
 				if( !e.destroyed && e.is(BobshotExitDoor) ) {
 					var exitDoor = e.as(BobshotExitDoor);
 					if( !Lib.rectangleOverlaps(left, top, wid, hei, exitDoor.left, exitDoor.top, exitDoor.wid, exitDoor.hei) )
