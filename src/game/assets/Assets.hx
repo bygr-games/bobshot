@@ -29,6 +29,7 @@ class Assets {
 	public static var potionFlying : SpriteLib;
 	public static var playerExit : SpriteLib;
 	public static var conditionalExit : SpriteLib;
+	public static var exitDoor : SpriteLib;
 	public static var recombobulator : SpriteLib;
 
 	/** LDtk world data **/
@@ -62,6 +63,7 @@ class Assets {
 		potionFlying = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.potion_flying.toAseprite());
 		playerExit = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.playerExit.toAseprite());
 		conditionalExit = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.conditional_exit.toAseprite());
+		exitDoor = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.exit_door.toAseprite());
 		recombobulator = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.recombobulator.toAseprite());
 
 		// Hot-reloading of CastleDB
@@ -132,6 +134,7 @@ class Assets {
 		potionFlying.tmod = tmod;
 		playerExit.tmod = tmod;
 		conditionalExit.tmod = tmod;
+		exitDoor.tmod = tmod;
 		recombobulator.tmod = tmod;
 		// <-- add other atlas TMOD updates here
 	}

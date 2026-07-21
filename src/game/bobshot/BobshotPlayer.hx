@@ -762,7 +762,7 @@ class BobshotPlayer extends Entity {
 	function createFallbackBitmap() {
 		if( fallbackBitmap!=null )
 			return;
-		fallbackBitmap = new h2d.Bitmap( h2d.Tile.fromColor(Green, iwid, ihei), spr );
+		fallbackBitmap = new h2d.Bitmap( h2d.Tile.fromColor(0x00ff00, iwid, ihei), spr );
 		fallbackBitmap.tile.setCenterRatio(0.5,1);
 	}
 
