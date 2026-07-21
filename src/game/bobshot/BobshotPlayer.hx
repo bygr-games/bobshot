@@ -1043,6 +1043,10 @@ class BobshotPlayer extends Entity {
 	override function fixedUpdate() {
 		super.fixedUpdate();
 
+		var triggerExitDoorRestart = false;
+		if( ca.isDown(MoveUp) || ui.TouchControls.isDown(MoveUp) )
+			triggerExitDoorRestart = !cd.hasSetS("exitDoorRestart", 0.2);
+
 		if( isBeingPulled() ) {
 			cancelVelocities();
 			updateAnimState();
@@ -1069,6 +1073,17 @@ class BobshotPlayer extends Entity {
 
 				resolvePlayerPush(other);
 			}
+
+		if( triggerExitDoorRestart )
+			for( e in Entity.ALL )
+				if( !e.destroyed && e.is(BobshotExitDoor) ) {
+					var exitDoor = e.as(BobshotExitDoor);
+					if( !Lib.rectangleOverlaps(left, top, wid, hei, exitDoor.left, exitDoor.top, exitDoor.wid, exitDoor.hei) )
+						continue;
+
+					game.startLobbyWorld();
+					return;
+				}
 
 		// Start next level when touching a PlayerExit entity
 		for( e in Entity.ALL )

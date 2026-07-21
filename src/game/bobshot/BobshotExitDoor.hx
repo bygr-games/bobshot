@@ -15,7 +15,7 @@ class BobshotExitDoor extends Entity {
 
 	public function new(cx:Int, cy:Int, ?pivotX:Null<Float>, ?pivotY:Null<Float>) {
 		super(cx, cy, pivotX, pivotY);
-		iwid = 16;
+		iwid = 48;
 		ihei = 48;
 		currentTag = IDLE_TAG;
 		shouldLoopCurrentTag = true;
