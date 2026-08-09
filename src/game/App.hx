@@ -245,6 +245,7 @@ class App extends dn.Process {
 		controller.bindPad(Jump, A);
 		controller.bindPad(Restart, SELECT);
 		controller.bindPad(Pause, START);
+		controller.bindPad(Shoot, RT);
 		controller.bindPad(MoveLeft, DPAD_LEFT);
 		controller.bindPad(MoveRight, DPAD_RIGHT);
 		controller.bindPad(MoveUp, DPAD_UP);

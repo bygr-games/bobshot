@@ -25197,7 +25197,10 @@
 								"height": 16,
 								"defUid": 86,
 								"px": [1256,400],
-								"fieldInstances": [{ "__identifier": "worldName", "__type": "String", "__value": null, "__tile": null, "defUid": 87, "realEditorValues": [] }],
+								"fieldInstances": [{ "__identifier": "worldName", "__type": "String", "__value": "TempleWorld", "__tile": null, "defUid": 87, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["TempleWorld"]
+								}] }],
 								"__worldX": 1000,
 								"__worldY": 320
 							},
