@@ -25197,10 +25197,7 @@
 								"height": 16,
 								"defUid": 86,
 								"px": [1256,400],
-								"fieldInstances": [{ "__identifier": "worldName", "__type": "String", "__value": "TempleWorld", "__tile": null, "defUid": 87, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["TempleWorld"]
-								}] }],
+								"fieldInstances": [{ "__identifier": "worldName", "__type": "String", "__value": null, "__tile": null, "defUid": 87, "realEditorValues": [] }],
 								"__worldX": 1000,
 								"__worldY": 320
 							},
@@ -53736,6 +53733,22 @@
 								"fieldInstances": [],
 								"__worldX": 8264,
 								"__worldY": 560
+							},
+							{
+								"__identifier": "PlayerStart",
+								"__grid": [170,1],
+								"__pivot": [0.5,1],
+								"__tags": [],
+								"__tile": { "tilesetUid": 23, "x": 208, "y": 80, "w": 16, "h": 16 },
+								"__smartColor": "#75FF00",
+								"iid": "7f928400-6fc0-11f1-8b30-afc6d11ea2a5",
+								"width": 16,
+								"height": 16,
+								"defUid": 21,
+								"px": [2728,32],
+								"fieldInstances": [],
+								"__worldX": 8024,
+								"__worldY": 80
 							}
 						]
 					},
