@@ -226,6 +226,15 @@ class BobshotGame extends Game {
 				}
 		}
 
+		// Spawn alien enemies
+		if( level.data.l_Entities.all_AlienEnemy != null ) {
+			for( alienSpawn in level.data.l_Entities.all_AlienEnemy )
+				{
+					var pivot = readPivot(alienSpawn, 0.5, 1.0);
+					new BobshotEnemy(alienSpawn.cx, alienSpawn.cy, "alien", pivot.x, pivot.y);
+				}
+		}
+
 		// Spawn flying potions
 		if( level.data.l_Entities.all_FlyingPotion != null ) {
 			for( potionSpawn in level.data.l_Entities.all_FlyingPotion )
