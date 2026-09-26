@@ -43,6 +43,45 @@ class BobshotGame extends Game {
 	}
 	#end
 
+	function isSnowBiomeLevel(l:World_Level) {
+		var valuesToScan = [
+			Reflect.field(l, "f_Biome"),
+			Reflect.field(l, "biome"),
+			Reflect.field(l, "f_biome"),
+			Reflect.field(l, "identifier"),
+			Reflect.field(l, "iid"),
+			Reflect.field(l, "worldIid"),
+			Reflect.field(l, "worldId"),
+		];
+
+		for( value in valuesToScan ) {
+			if( value==null )
+				continue;
+			var text = Std.string(value).toLowerCase();
+			if( text.indexOf("snow")>=0 )
+				return true;
+		}
+
+		var fieldInstances:Dynamic = Reflect.field(l, "fieldInstances");
+		if( fieldInstances!=null ) {
+			for( field in (cast fieldInstances:Array<Dynamic>) ) {
+				var value = Reflect.field(field, "__value");
+				if( value==null )
+					continue;
+				var text = Std.string(value).toLowerCase();
+				if( text.indexOf("snow")>=0 )
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	function startWeatherIfNeeded(l:World_Level) {
+		if( isSnowBiomeLevel(l) )
+			new SnowWeather();
+	}
+
 	function readPivot(spawn:Dynamic, defaultX:Float=0.5, defaultY:Float=1.0) {
 		var pivotX = defaultX;
 		var pivotY = defaultY;
@@ -68,6 +107,7 @@ class BobshotGame extends Game {
 
 	override function startLevel(l:World_Level) {
 		super.startLevel(l);
+		startWeatherIfNeeded(l);
 
 		if( level.data.l_Entities.all_PlayerExit != null ) {
 			for( exitSpawn in level.data.l_Entities.all_PlayerExit )
