@@ -78,8 +78,10 @@ class BobshotGame extends Game {
 	}
 
 	function startWeatherIfNeeded(l:World_Level) {
-		if( isSnowBiomeLevel(l) )
+		if( isSnowBiomeLevel(l) ) {
 			new SnowWeather();
+			new SnowFog();
+		}
 	}
 
 	function readPivot(spawn:Dynamic, defaultX:Float=0.5, defaultY:Float=1.0) {
