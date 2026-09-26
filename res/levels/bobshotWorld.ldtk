@@ -25395,22 +25395,6 @@
 								"__worldY": -64
 							},
 							{
-								"__identifier": "WorldEntry",
-								"__grid": [88,9],
-								"__pivot": [0.5,1],
-								"__tags": [],
-								"__tile": null,
-								"__smartColor": "#EAD4AA",
-								"iid": "d4d44400-6fc0-11f1-8a4d-873981273838",
-								"width": 16,
-								"height": 16,
-								"defUid": 86,
-								"px": [1416,160],
-								"fieldInstances": [{ "__identifier": "worldName", "__type": "String", "__value": null, "__tile": null, "defUid": 87, "realEditorValues": [] }],
-								"__worldX": 1160,
-								"__worldY": 80
-							},
-							{
 								"__identifier": "PlayerExit",
 								"__grid": [30,28],
 								"__pivot": [0.5,1],
@@ -25649,6 +25633,25 @@
 								"fieldInstances": [{ "__identifier": "visible", "__type": "Bool", "__value": false, "__tile": null, "defUid": 61, "realEditorValues": [] }],
 								"__worldX": 680,
 								"__worldY": 432
+							},
+							{
+								"__identifier": "WorldEntry",
+								"__grid": [88,9],
+								"__pivot": [0.5,1],
+								"__tags": [],
+								"__tile": null,
+								"__smartColor": "#EAD4AA",
+								"iid": "7d0bfa80-96d0-11f1-958f-dbc2bac6fc6b",
+								"width": 16,
+								"height": 16,
+								"defUid": 86,
+								"px": [1416,160],
+								"fieldInstances": [{ "__identifier": "worldName", "__type": "String", "__value": "SnowWorld", "__tile": null, "defUid": 87, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["SnowWorld"]
+								}] }],
+								"__worldX": 1160,
+								"__worldY": 80
 							}
 						]
 					},
