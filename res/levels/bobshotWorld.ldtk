@@ -11,7 +11,7 @@
 	"iid": "de07ff90-7820-11ed-ac6b-bbc68d89d940",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 136,
+	"nextUid": 137,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": null,
@@ -1907,6 +1907,41 @@
 					"tilesetUid": null
 				}
 			]
+		},
+		{
+			"identifier": "AlienEnemy",
+			"uid": 136,
+			"tags": [],
+			"exportToToc": false,
+			"allowOutOfBounds": false,
+			"doc": null,
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"minWidth": null,
+			"maxWidth": null,
+			"minHeight": null,
+			"maxHeight": null,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#E4A672",
+			"renderMode": "Rectangle",
+			"showName": true,
+			"tilesetId": null,
+			"tileRenderMode": "FitInside",
+			"tileRect": null,
+			"uiTileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0.5,
+			"pivotY": 1,
+			"fieldDefs": []
 		}
 	], "tilesets": [
 		{
@@ -94475,6 +94510,22 @@
 								"fieldInstances": [],
 								"__worldX": 9096,
 								"__worldY": -64
+							},
+							{
+								"__identifier": "AlienEnemy",
+								"__grid": [40,25],
+								"__pivot": [0.5,1],
+								"__tags": [],
+								"__tile": null,
+								"__smartColor": "#E4A672",
+								"iid": "136c29d0-96d0-11f1-958f-df02069936f5",
+								"width": 16,
+								"height": 16,
+								"defUid": 136,
+								"px": [648,416],
+								"fieldInstances": [],
+								"__worldX": 9736,
+								"__worldY": 288
 							}
 						]
 					},
