@@ -24,6 +24,7 @@ class Projectile extends Entity {
 		strategy = switch( type.toLowerCase() ) {
 			case "basic": new BasicProjectileStrategy();
 			case "violet": new VioletProjectileStrategy();
+			case "alienlaser": new GreenLaserProjectileStrategy();
 			default:
 				trace('Unknown projectile type: $type, defaulting to basic');
 				new BasicProjectileStrategy();

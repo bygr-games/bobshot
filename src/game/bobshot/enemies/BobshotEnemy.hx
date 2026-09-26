@@ -28,6 +28,7 @@ private typedef EnemyTypeDef = {
 	- "shooting": stays in place, shoots toward player every 3 seconds, and does not hurt on contact
 	- "scared": runs away from nearby players and does not hurt them on contact
 	- "spike": stays in place and splits players on contact
+	- "alien": chases players and periodically fires a horizontal laser when aligned
 **/
 class BobshotEnemy extends Entity {
 	public static inline var COLLISION_EPSILON = 0.001;
@@ -135,6 +136,20 @@ class BobshotEnemy extends Entity {
 			despawnAfterLeavingLevel: false,
 			hitsToKill: 5,
 			points: 1000,
+		});
+
+		defs.set("alien", {
+			id: "alien",
+			createStrategy: function() return new AlienEnemyStrategy(),
+			spriteLib: function() return Assets.enemyAlien,
+			harmless: false,
+			hazard: true,
+			reactsToNonLethalHits: true,
+			fallbackColor: 0x4CD137,
+			useInBoundsWallCollision: false,
+			despawnAfterLeavingLevel: false,
+			hitsToKill: 3,
+			points: 700,
 		});
 
 		return defs;
