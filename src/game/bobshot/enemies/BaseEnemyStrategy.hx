@@ -17,6 +17,10 @@ class BaseEnemyStrategy implements EnemyStrategy {
 
 	public function onXCollision(enemy:BobshotEnemy, dir:Int):Void {}
 
+	public function getAnimState(enemy:BobshotEnemy):Null<String> {
+		return null;
+	}
+
 	public function dispose():Void {}
 
 	inline function setHitbox(enemy:BobshotEnemy, width:Int, height:Int):Void {

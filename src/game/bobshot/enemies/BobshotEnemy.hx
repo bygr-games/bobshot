@@ -29,6 +29,7 @@ private typedef EnemyTypeDef = {
 	- "scared": runs away from nearby players and does not hurt them on contact
 	- "spike": stays in place and splits players on contact
 	- "alien": chases players and periodically fires a horizontal laser when aligned
+	- "flying": flies back and forth, reverses on walls/level edges, dives at players detected below it
 **/
 class BobshotEnemy extends Entity {
 	public static inline var COLLISION_EPSILON = 0.001;
@@ -49,6 +50,7 @@ class BobshotEnemy extends Entity {
 	var animJump : Null<String>;
 	var animFall : Null<String>;
 	var animShoot : Null<String>;
+	var animChase : Null<String>;
 	var currentAnim : Null<String>;
 
 	static function initEnemyDefs() {
@@ -150,6 +152,20 @@ class BobshotEnemy extends Entity {
 			despawnAfterLeavingLevel: false,
 			hitsToKill: 3,
 			points: 700,
+		});
+
+		defs.set("flying", {
+			id: "flying",
+			createStrategy: function() return new FlyingEnemyStrategy(),
+			spriteLib: function() return Assets.enemyFlying,
+			harmless: false,
+			hazard: false,
+			reactsToNonLethalHits: true,
+			fallbackColor: 0x733E39,
+			useInBoundsWallCollision: false,
+			despawnAfterLeavingLevel: false,
+			hitsToKill: 1,
+			points: 400,
 		});
 
 		return defs;
@@ -347,6 +363,7 @@ class BobshotEnemy extends Entity {
 		animJump = resolveFirstExisting(["jump", "enemy_jump"]);
 		animFall = resolveFirstExisting(["fall", "enemy_fall"]);
 		animShoot = resolveFirstExisting(["shoot", "enemy_shoot"]);
+		animChase = resolveFirstExisting(["chase", "enemy_chase"]);
 
 		if( animIdle==null )
 			animIdle = resolveStateAnim(baseNames, "idle");
@@ -361,8 +378,22 @@ class BobshotEnemy extends Entity {
 
 		if( animIdle!=null )
 			applyAnim(animIdle);
+		else if( animRun!=null )
+			applyAnim(animRun);
+		else if( animChase!=null )
+			applyAnim(animChase);
 		else
 			createFallbackBitmap();
+	}
+
+	/** Resolved "run" animation group (used by strategies overriding the default anim logic) **/
+	public inline function getAnimRunGroup() {
+		return animRun;
+	}
+
+	/** Resolved "chase" animation group (used by strategies overriding the default anim logic) **/
+	public inline function getAnimChaseGroup() {
+		return animChase;
 	}
 
 	function createFallbackBitmap() {
@@ -412,7 +443,10 @@ class BobshotEnemy extends Entity {
 	function updateAnimState() {
 		var next : Null<String>;
 
-		if( cd.has("enemyShootAnim") && animShoot!=null )
+		var strategyAnim = strategy.getAnimState(this);
+		if( strategyAnim!=null )
+			next = strategyAnim;
+		else if( cd.has("enemyShootAnim") && animShoot!=null )
 			next = animShoot;
 		else if( !isOnGroundNow() )
 			next = dyTotal<0 ? (animJump!=null ? animJump : animIdle) : (animFall!=null ? animFall : animIdle);

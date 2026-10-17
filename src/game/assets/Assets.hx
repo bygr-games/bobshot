@@ -27,6 +27,7 @@ class Assets {
 	public static var enemySpike : SpriteLib;
 	public static var enemyBig : SpriteLib;
 	public static var enemyAlien : SpriteLib;
+	public static var enemyFlying : SpriteLib;
 	public static var potionFlying : SpriteLib;
 	public static var playerExit : SpriteLib;
 	public static var conditionalExit : SpriteLib;
@@ -63,6 +64,7 @@ class Assets {
 		enemySpike = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_spike.toAseprite());
 		enemyBig = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_big.toAseprite());
 		enemyAlien = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_alien.toAseprite());
+		enemyFlying = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.enemy_flying.toAseprite());
 		potionFlying = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.potion_flying.toAseprite());
 		playerExit = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.playerExit.toAseprite());
 		conditionalExit = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.conditional_exit.toAseprite());
@@ -136,6 +138,7 @@ class Assets {
 		enemySpike.tmod = tmod;
 		enemyBig.tmod = tmod;
 		enemyAlien.tmod = tmod;
+		enemyFlying.tmod = tmod;
 		potionFlying.tmod = tmod;
 		playerExit.tmod = tmod;
 		conditionalExit.tmod = tmod;

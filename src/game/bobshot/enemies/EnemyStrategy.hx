@@ -28,6 +28,12 @@ interface EnemyStrategy {
 	function onXCollision(enemy:BobshotEnemy, dir:Int):Void;
 
 	/**
+		Optional animation override: return a resolved animation group name to force it,
+		or null to use the default animation logic (idle/run/jump/fall based on physics state)
+	**/
+	function getAnimState(enemy:BobshotEnemy):Null<String>;
+
+	/**
 		Clean up resources
 	**/
 	function dispose():Void;

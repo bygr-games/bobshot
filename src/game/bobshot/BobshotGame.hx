@@ -235,6 +235,15 @@ class BobshotGame extends Game {
 				}
 		}
 
+		// Spawn flying enemies
+		if( level.data.l_Entities.all_FlyingEnemy != null ) {
+			for( flyingSpawn in level.data.l_Entities.all_FlyingEnemy )
+				{
+					var pivot = readPivot(flyingSpawn, 0.5, 1.0);
+					new BobshotEnemy(flyingSpawn.cx, flyingSpawn.cy, "flying", pivot.x, pivot.y);
+				}
+		}
+
 		// Spawn flying potions
 		if( level.data.l_Entities.all_FlyingPotion != null ) {
 			for( potionSpawn in level.data.l_Entities.all_FlyingPotion )
